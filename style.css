@@ -1,8 +1,8 @@
 /* Overall page layout */
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #ffffff;
-  color: #111;
+  background-color: #d8f3e3; /* 薄荷绿背景 */
+  color: #5a321f; /* 巧克力棕文字 */
   margin: 0;
   padding: 0;
 }
@@ -14,7 +14,7 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 30px 50px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #b7ddc8; /* 薄荷浅色边线 */
   font-size: 14px;
 }
 
@@ -27,7 +27,7 @@ header {
 .center span {
   font-size: 14px;
   font-weight: 400;
-  color: #666;
+  color: #8a6a5a; /* 浅巧克力色 */
 }
 
 
@@ -43,7 +43,7 @@ main {
 /* Year */
 .project-meta {
   font-size: 16px;
-  color: #777;
+  color: #8a6a5a;
   letter-spacing: 2px;
   margin-bottom: 30px;
 }
@@ -61,7 +61,7 @@ main {
 /* Student name */
 .project-subtitle {
   font-size: 22px;
-  color: #777;
+  color: #8a6a5a;
   margin-bottom: 80px;
 }
 
@@ -79,7 +79,7 @@ main {
 /* Paragraph */
 p {
   font-size: 16px;
-  color: #444;
+  color: #6b4533; /* 巧克力棕 */
   margin-bottom: 30px;
 }
 
@@ -88,8 +88,8 @@ p {
 button {
   display: block;
   margin: 0 auto;
-  background-color: #111;
-  color: white;
+  background-color: #6b3e26; /* 巧克力色 */
+  color: #d8f3e3; /* 薄荷色文字 */
   border: none;
   padding: 15px 40px;
   font-size: 16px;
@@ -100,7 +100,7 @@ button {
 
 
 button:hover {
-  background-color: #333;
+  background-color: #4d2a1b; /* 深巧克力色 */
 }
 
 
@@ -109,8 +109,8 @@ button:hover {
   max-width: 500px;
   margin: 40px auto;
   padding: 20px;
-  border: 1px solid #ddd;
-  background-color: #fafafa;
+  border: 1px solid #b7ddc8;
+  background-color: #eefaf3; /* 浅薄荷白 */
   text-align: center;
   font-size: 16px;
   line-height: 1.6;
