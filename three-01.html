@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Golden Mandelbrot Jelly Field</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #0b1330;
+      color: #f6efcf;
+      font-family: Arial, sans-serif;
+    }
+
+    h1 {
+      padding: 20px 20px 0 20px;
+      margin: 0;
+      font-size: 22px;
+      font-weight: 400;
+    }
+
+    p {
+      padding: 0 20px;
+      max-width: 760px;
+      color: #ddd4b4;
+      line-height: 1.5;
+    }
+
+    #three-container {
+      width: 720px;
+      height: 400px;
+      margin: 20px;
+      border: 1px solid #f1e0a6;
+      background: #17367d;
+    }
+  </style>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <h1>3D Canvas 1: Golden Mandelbrot Jelly Field</h1>
+  <p>
+    A field of glowing Mandelbrot-based spheres suspended in water like a school of luminous jelly-organisms,
+    with perforated openings, fractal surface lines, orbiting ribbons, and drifting underwater particles.
+  </p>
+
+  <div id="three-container"></div>
+
+  <script type="module">
+    import * as THREE from "three";
+    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+    const container = document.getElementById("three-container");
+
+    // --------------------------------------------------
+    // SCENE / CAMERA / RENDERER
+    // --------------------------------------------------
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color("#17367d");
+    scene.fog = new THREE.Fog("#17367d", 6.5, 16.0);
+
+    const camera = new THREE.PerspectiveCamera(
+      55,
+      720 / 400,
+      0.1,
+      1000
+    );
+    camera.position.set(0, 0.0, 9.3);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(720, 400);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+
+    // --------------------------------------------------
+    // SETTINGS
+    // --------------------------------------------------
+
+    const baseRadius = 1.05;
+    const displacementStrength = 0.14;
+    const maxIterations = 90;
+
+    const xMin = -2.15;
+    const xMax = 0.65;
+    const yMin = -1.25;
+    const yMax = 1.25;
+
+    const lonSegments = 128;
+    const latSegments = 78;
+
+    // --------------------------------------------------
+    // MANDELBROT
+    // --------------------------------------------------
+
+    function mandelbrot(cx, cy) {
+      let x = 0.0;
+      let y = 0.0;
+      let iteration = 0;
+
+      while (x * x + y * y <= 4.0 && iteration < maxIterations) {
+        const xtemp = x * x - y * y + cx;
+        y = 2.0 * x * y + cy;
+        x = xtemp;
+        iteration++;
+      }
+
+      return iteration;
+    }
+
+    function normalizedMandelbrot(cx, cy) {
+      const iteration = mandelbrot(cx, cy);
+      if (iteration >= maxIterations) return 1.0;
+      return iteration / maxIterations;
+    }
+
+    function fractalValueFromUV(u, v) {
+      const mx = THREE.MathUtils.lerp(xMin, xMax, u);
+      const my = THREE.MathUtils.lerp(yMin, yMax, v);
+      return normalizedMandelbrot(mx, my);
+    }
+
+    function sphereNormalFromUV(u, v) {
+      const longitude = (u - 0.5) * Math.PI * 2.0;
+      const latitude = (0.5 - v) * Math.PI;
+
+      const x = Math.cos(latitude) * Math.cos(longitude);
+      const y = Math.sin(latitude);
+      const z = Math.cos(latitude) * Math.sin(longitude);
+
+      return new THREE.Vector3(x, y, z).normalize();
+    }
+
+    function radiusFromValue(m) {
+      const boundary = Math.sin(m * Math.PI);
+      const relief = Math.pow(boundary, 1.2) * displacementStrength;
+      return baseRadius + relief;
+    }
+
+    function pointOnSphere(u, v, offset = 0) {
+      const m = fractalValueFromUV(u, v);
+      const n = sphereNormalFromUV(u, v);
+      const r = radiusFromValue(m) + offset;
+      return n.multiplyScalar(r);
+    }
+
+    // --------------------------------------------------
+    // GOLDEN COLOR PALETTE
+    // --------------------------------------------------
+
+    const colDarkAmber = new THREE.Color("#6d4809");
+    const colAmber = new THREE.Color("#a86f10");
+    const colGold = new THREE.Color("#d39a2e");
+    const colLightGold = new THREE.Color("#f1cd62");
+    const colPaleGold = new THREE.Color("#ffe498");
+    const colCream = new THREE.Color("#fff4c8");
+
+    function getFractalColor(t) {
+      const c = new THREE.Color();
+
+      if (t < 0.18) {
+        c.lerpColors(colDarkAmber, colAmber, t / 0.18);
+      } else if (t < 0.40) {
+        c.lerpColors(colAmber, colGold, (t - 0.18) / 0.22);
+      } else if (t < 0.62) {
+        c.lerpColors(colGold, colLightGold, (t - 0.40) / 0.22);
+      } else if (t < 0.82) {
+        c.lerpColors(colLightGold, colPaleGold, (t - 0.62) / 0.20);
+      } else {
+        c.lerpColors(colPaleGold, colCream, (t - 0.82) / 0.18);
+      }
+
+      return c;
+    }
+
+    // --------------------------------------------------
+    // PERFORATION MASK
+    // --------------------------------------------------
+
+    function isOpenPatch(u, v) {
+      const m = fractalValueFromUV(u, v);
+
+      if (m < 0.18 || m > 0.92) {
+        return false;
+      }
+
+      const bandA = Math.abs(Math.sin(m * 26.0 + u * 7.0));
+      const bandB = Math.abs(Math.sin(m * 19.0 - v * 9.0));
+
+      const organic =
+        Math.sin(u * 38.0) * 0.45 +
+        Math.cos(v * 31.0) * 0.35 +
+        Math.sin((u + v) * 42.0) * 0.25;
+
+      return (
+        bandA < 0.12 &&
+        bandB < 0.34 &&
+        organic > 0.22
+      );
+    }
+
+    // --------------------------------------------------
+    // BUILD BASE GEOMETRY
+    // --------------------------------------------------
+
+    const positions = [];
+    const colors = [];
+    const indices = [];
+
+    function vertexIndex(i, j) {
+      return j * (lonSegments + 1) + i;
+    }
+
+    for (let j = 0; j <= latSegments; j++) {
+      const v = j / latSegments;
+
+      for (let i = 0; i <= lonSegments; i++) {
+        const u = i / lonSegments;
+
+        const p = pointOnSphere(u, v);
+        positions.push(p.x, p.y, p.z);
+
+        const m = fractalValueFromUV(u, v);
+        const col = getFractalColor(m);
+        colors.push(col.r, col.g, col.b);
+      }
+    }
+
+    for (let j = 0; j < latSegments; j++) {
+      for (let i = 0; i < lonSegments; i++) {
+        const uMid = (i + 0.5) / lonSegments;
+        const vMid = (j + 0.5) / latSegments;
+
+        if (isOpenPatch(uMid, vMid)) continue;
+
+        const a = vertexIndex(i, j);
+        const b = vertexIndex(i + 1, j);
+        const c = vertexIndex(i, j + 1);
+        const d = vertexIndex(i + 1, j + 1);
+
+        indices.push(a, c, b);
+        indices.push(b, c, d);
+      }
+    }
+
+    const baseGeometry = new THREE.BufferGeometry();
+    baseGeometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(positions, 3)
+    );
+    baseGeometry.setAttribute(
+      "color",
+      new THREE.Float32BufferAttribute(colors, 3)
+    );
+    baseGeometry.setIndex(indices);
+    baseGeometry.computeVertexNormals();
+
+    // --------------------------------------------------
+    // BASE MATERIALS
+    // --------------------------------------------------
+
+    const sphereMaterial = new THREE.MeshStandardMaterial({
+      vertexColors: true,
+      metalness: 0.10,
+      roughness: 0.38,
+      emissive: new THREE.Color("#f2c14e"),
+      emissiveIntensity: 0.34,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.98
+    });
+
+    const wireMaterial = new THREE.MeshBasicMaterial({
+      color: "#fff1b5",
+      wireframe: true,
+      transparent: true,
+      opacity: 0.08
+    });
+
+    // --------------------------------------------------
+    // HELPERS
+    // --------------------------------------------------
+
+    function addSurfaceLine(group, u1, v1, u2, v2, color, opacity = 0.5) {
+      const p1 = pointOnSphere(u1, v1, 0.020);
+      const p2 = pointOnSphere(u2, v2, 0.020);
+
+      const lineGeo = new THREE.BufferGeometry().setFromPoints([p1, p2]);
+      const lineMat = new THREE.LineBasicMaterial({
+        color,
+        transparent: true,
+        opacity
+      });
+
+      const line = new THREE.Line(lineGeo, lineMat);
+      group.add(line);
+    }
+
+    function createPatternGroup() {
+      const group = new THREE.Group();
+      const bandTargets = [0.24, 0.36, 0.48, 0.62, 0.76, 0.88];
+
+      for (let vv = 0.08; vv <= 0.92; vv += 0.030) {
+        for (let uu = 0.0; uu <= 1.0; uu += 0.014) {
+          const m = fractalValueFromUV(uu, vv);
+
+          for (let b = 0; b < bandTargets.length; b++) {
+            if (Math.abs(m - bandTargets[b]) < 0.013) {
+              let color = "#fff1b5";
+              if (b === 2) color = "#ffd86d";
+              if (b === 3) color = "#f2c14e";
+
+              addSurfaceLine(
+                group,
+                uu,
+                vv,
+                Math.min(uu + 0.013, 1.0),
+                vv,
+                color,
+                0.34
+              );
+            }
+          }
+        }
+      }
+
+      for (let k = 0; k < 72; k++) {
+        const u = Math.random();
+        const v = Math.random();
+        const m = fractalValueFromUV(u, v);
+
+        if (m > 0.30 && m < 0.86 && Math.random() < 0.38) {
+          const du = 0.010;
+          const dv = 0.010;
+
+          const color =
+            m > 0.70 ? "#fff1b5" :
+            m > 0.50 ? "#ffd86d" :
+            "#f2c14e";
+
+          addSurfaceLine(
+            group,
+            u,
+            v,
+            Math.min(u + du, 1.0),
+            Math.min(v + dv, 1.0),
+            color,
+            0.28
+          );
+        }
+      }
+
+      return group;
+    }
+
+    function makeRibbonPoints(config) {
+      const pts = [];
+      const steps = 120;
+
+      for (let i = 0; i <= steps; i++) {
+        const t = (i / steps) * Math.PI * 2;
+
+        const r =
+          config.radius +
+          Math.sin(t * config.freq1 + config.phase1) * config.amp1 +
+          Math.cos(t * config.freq2 + config.phase2) * config.amp2;
+
+        let x = Math.cos(t) * r;
+        let y = Math.sin(t * config.verticalFreq + config.verticalPhase) * config.verticalAmp;
+        let z = Math.sin(t) * r;
+
+        const p = new THREE.Vector3(x, y, z);
+        const euler = new THREE.Euler(config.rotX, config.rotY, config.rotZ);
+        p.applyEuler(euler);
+
+        pts.push(p);
+      }
+
+      return pts;
+    }
+
+    function createRibbonGroup(scaleFactor = 1) {
+      const group = new THREE.Group();
+
+      function addRibbon(config) {
+        const points = makeRibbonPoints(config);
+        const curve = new THREE.CatmullRomCurve3(points, true);
+
+        const tubeGeo = new THREE.TubeGeometry(
+          curve,
+          180,
+          config.tubeRadius,
+          10,
+          true
+        );
+
+        const tubeMat = new THREE.MeshStandardMaterial({
+          color: config.color,
+          transparent: true,
+          opacity: config.opacity,
+          metalness: 0.06,
+          roughness: 0.30,
+          emissive: new THREE.Color(config.color),
+          emissiveIntensity: 0.28,
+          side: THREE.DoubleSide
+        });
+
+        const ribbon = new THREE.Mesh(tubeGeo, tubeMat);
+
+        const lineGeo = new THREE.BufferGeometry().setFromPoints(
+          curve.getPoints(200)
+        );
+        const lineMat = new THREE.LineBasicMaterial({
+          color: config.lineColor,
+          transparent: true,
+          opacity: config.lineOpacity
+        });
+        const ribbonLine = new THREE.LineLoop(lineGeo, lineMat);
+
+        const wrapper = new THREE.Group();
+        wrapper.add(ribbon);
+        wrapper.add(ribbonLine);
+
+        wrapper.userData = {
+          speedY: config.speedY,
+          speedX: config.speedX,
+          breathe: config.breathe,
+          phase: Math.random() * Math.PI * 2
+        };
+
+        group.add(wrapper);
+      }
+
+      addRibbon({
+        radius: 1.45 * scaleFactor,
+        amp1: 0.10,
+        amp2: 0.06,
+        freq1: 3,
+        freq2: 5,
+        phase1: 0.0,
+        phase2: 1.4,
+        verticalAmp: 0.18 * scaleFactor,
+        verticalFreq: 2,
+        verticalPhase: 0.2,
+        rotX: 0.35,
+        rotY: 0.10,
+        rotZ: 0.00,
+        tubeRadius: 0.018 * scaleFactor,
+        color: "#fff1b5",
+        lineColor: "#fff6cf",
+        opacity: 0.22,
+        lineOpacity: 0.36,
+        speedY: 0.0025,
+        speedX: 0.0007,
+        breathe: 0.016
+      });
+
+      addRibbon({
+        radius: 1.30 * scaleFactor,
+        amp1: 0.08,
+        amp2: 0.08,
+        freq1: 4,
+        freq2: 6,
+        phase1: 1.2,
+        phase2: 0.5,
+        verticalAmp: 0.20 * scaleFactor,
+        verticalFreq: 3,
+        verticalPhase: 1.1,
+        rotX: 1.18,
+        rotY: 0.25,
+        rotZ: 0.58,
+        tubeRadius: 0.014 * scaleFactor,
+        color: "#ffd86d",
+        lineColor: "#fff6cf",
+        opacity: 0.18,
+        lineOpacity: 0.24,
+        speedY: -0.0020,
+        speedX: 0.0009,
+        breathe: 0.012
+      });
+
+      return group;
+    }
+
+    function createGlowDots(scaleFactor = 1) {
+      const group = new THREE.Group();
+      const glowColors = ["#fff6cf", "#fff1b5", "#ffd86d", "#f2c14e"];
+
+      for (let i = 0; i < 10; i++) {
+        const size = THREE.MathUtils.randFloat(0.016, 0.040) * scaleFactor;
+        const geo = new THREE.SphereGeometry(size, 10, 10);
+        const color = glowColors[Math.floor(Math.random() * glowColors.length)];
+
+        const mat = new THREE.MeshStandardMaterial({
+          color: color,
+          emissive: new THREE.Color(color),
+          emissiveIntensity: 1.2,
+          transparent: true,
+          opacity: 0.95,
+          roughness: 0.20,
+          metalness: 0.02
+        });
+
+        const mesh = new THREE.Mesh(geo, mat);
+
+        const r = THREE.MathUtils.randFloat(1.35, 2.05) * scaleFactor;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(THREE.MathUtils.randFloatSpread(2));
+
+        mesh.position.set(
+          r * Math.sin(phi) * Math.cos(theta),
+          r * Math.cos(phi),
+          r * Math.sin(phi) * Math.sin(theta)
+        );
+
+        mesh.userData = {
+          radius: r,
+          theta: theta,
+          phi: phi,
+          speed: THREE.MathUtils.randFloat(0.001, 0.003),
+          verticalSpeed: THREE.MathUtils.randFloat(0.4, 1.1),
+          phase: Math.random() * Math.PI * 2
+        };
+
+        group.add(mesh);
+      }
+
+      return group;
+    }
+
+    function createJellySphere(config) {
+      const root = new THREE.Group();
+      root.position.set(config.x, config.y, config.z);
+      root.scale.setScalar(config.scale);
+
+      const coreGroup = new THREE.Group();
+      root.add(coreGroup);
+
+      const sphere = new THREE.Mesh(baseGeometry.clone(), sphereMaterial.clone());
+      coreGroup.add(sphere);
+
+      const wire = new THREE.Mesh(baseGeometry.clone(), wireMaterial.clone());
+      wire.scale.set(1.004, 1.004, 1.004);
+      coreGroup.add(wire);
+
+      const patternGroup = createPatternGroup();
+      coreGroup.add(patternGroup);
+
+      const auraGeometry = new THREE.SphereGeometry(baseRadius * 1.16, 64, 64);
+      const auraMaterial = new THREE.MeshBasicMaterial({
+        color: "#ffe79a",
+        transparent: true,
+        opacity: 0.065,
+        side: THREE.BackSide
+      });
+      const aura = new THREE.Mesh(auraGeometry, auraMaterial);
+      coreGroup.add(aura);
+
+      const ribbonGroup = createRibbonGroup(1.0);
+      root.add(ribbonGroup);
+
+      const glowDots = createGlowDots(1.0);
+      root.add(glowDots);
+
+      root.userData = {
+        baseX: config.x,
+        baseY: config.y,
+        baseZ: config.z,
+        phase: config.phase,
+        driftPhase: config.driftPhase,
+        floatAmp: config.floatAmp,
+        xAmp: config.xAmp,
+        zAmp: config.zAmp,
+        rotY: config.rotY,
+        rotX: config.rotX,
+        coreGroup,
+        aura,
+        ribbonGroup,
+        glowDots
+      };
+
+      return root;
+    }
+
+    // --------------------------------------------------
+    // MORE SPHERES, MORE SPATIALLY SCATTERED
+    // --------------------------------------------------
+
+    const jellySpecs = [
+      { x: -0.60, y:  3.00, z: -1.60, scale: 0.54, phase: 0.1, driftPhase: 1.2, floatAmp: 0.07, xAmp: 0.10, zAmp: 0.08, rotY: 0.0025, rotX: 0.0005 },
+      { x:  0.55, y:  2.20, z: -0.90, scale: 0.66, phase: 0.8, driftPhase: 0.7, floatAmp: 0.08, xAmp: 0.12, zAmp: 0.08, rotY: 0.0023, rotX: 0.00045 },
+      { x: -1.70, y:  1.65, z: -2.10, scale: 0.48, phase: 1.4, driftPhase: 2.0, floatAmp: 0.06, xAmp: 0.08, zAmp: 0.10, rotY: 0.0021, rotX: 0.0004 },
+      { x:  1.55, y:  1.10, z: -1.30, scale: 0.58, phase: 1.8, driftPhase: 1.5, floatAmp: 0.07, xAmp: 0.09, zAmp: 0.09, rotY: 0.0020, rotX: 0.00035 },
+      { x: -0.15, y:  0.35, z:  0.20, scale: 0.92, phase: 2.4, driftPhase: 2.8, floatAmp: 0.10, xAmp: 0.12, zAmp: 0.08, rotY: 0.0020, rotX: 0.00042 },
+      { x: -2.05, y:  0.10, z: -2.40, scale: 0.42, phase: 2.9, driftPhase: 0.3, floatAmp: 0.05, xAmp: 0.07, zAmp: 0.09, rotY: 0.0018, rotX: 0.00032 },
+      { x:  2.05, y: -0.30, z: -1.90, scale: 0.46, phase: 3.2, driftPhase: 2.3, floatAmp: 0.06, xAmp: 0.08, zAmp: 0.10, rotY: 0.0018, rotX: 0.00032 },
+      { x:  0.95, y: -1.20, z: -0.60, scale: 0.74, phase: 3.6, driftPhase: 1.9, floatAmp: 0.08, xAmp: 0.10, zAmp: 0.08, rotY: 0.0019, rotX: 0.00036 },
+      { x: -1.10, y: -1.55, z: -1.20, scale: 0.62, phase: 4.1, driftPhase: 1.1, floatAmp: 0.07, xAmp: 0.09, zAmp: 0.09, rotY: 0.0019, rotX: 0.00035 },
+      { x:  0.20, y: -2.35, z: -2.20, scale: 0.50, phase: 4.7, driftPhase: 2.6, floatAmp: 0.06, xAmp: 0.08, zAmp: 0.11, rotY: 0.0017, rotX: 0.00030 },
+      { x: -1.85, y: -2.70, z: -1.40, scale: 0.40, phase: 5.0, driftPhase: 0.9, floatAmp: 0.05, xAmp: 0.06, zAmp: 0.08, rotY: 0.0016, rotX: 0.00028 },
+      { x:  1.70, y: -2.45, z: -2.60, scale: 0.36, phase: 5.5, driftPhase: 1.7, floatAmp: 0.05, xAmp: 0.06, zAmp: 0.08, rotY: 0.0015, rotX: 0.00026 }
+    ];
+
+    const jellySpheres = [];
+    jellySpecs.forEach(spec => {
+      const jelly = createJellySphere(spec);
+      scene.add(jelly);
+      jellySpheres.push(jelly);
+    });
+
+    // --------------------------------------------------
+    // GLOBAL UNDERWATER PARTICLES
+    // --------------------------------------------------
+
+    const planktonCount = 620;
+    const planktonPositions = [];
+    const planktonColors = [];
+
+    for (let i = 0; i < planktonCount; i++) {
+      planktonPositions.push(
+        THREE.MathUtils.randFloatSpread(13),
+        THREE.MathUtils.randFloatSpread(10),
+        THREE.MathUtils.randFloatSpread(14)
+      );
+
+      const c = new THREE.Color(
+        Math.random() < 0.70 ? "#fff4c8" : "#f1d880"
+      );
+
+      planktonColors.push(c.r, c.g, c.b);
+    }
+
+    const planktonGeometry = new THREE.BufferGeometry();
+    planktonGeometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(planktonPositions, 3)
+    );
+    planktonGeometry.setAttribute(
+      "color",
+      new THREE.Float32BufferAttribute(planktonColors, 3)
+    );
+
+    const planktonMaterial = new THREE.PointsMaterial({
+      size: 0.028,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.30,
+      depthWrite: false
+    });
+
+    const plankton = new THREE.Points(planktonGeometry, planktonMaterial);
+    scene.add(plankton);
+
+    // --------------------------------------------------
+    // LIGHTING
+    // --------------------------------------------------
+
+    const ambientLight = new THREE.AmbientLight("#fef5d0", 0.88);
+    scene.add(ambientLight);
+
+    const keyLight = new THREE.PointLight("#ffe49a", 4.2);
+    keyLight.position.set(2.5, 3.2, 5.0);
+    scene.add(keyLight);
+
+    const sideGoldLight = new THREE.PointLight("#f2c14e", 3.1);
+    sideGoldLight.position.set(-3.8, -1.8, 4.0);
+    scene.add(sideGoldLight);
+
+    const lowerWarmLight = new THREE.PointLight("#ffd86d", 2.1);
+    lowerWarmLight.position.set(3.0, -3.0, 2.2);
+    scene.add(lowerWarmLight);
+
+    const topSeaLight = new THREE.DirectionalLight("#9ec6ff", 0.72);
+    topSeaLight.position.set(0, 5, 2);
+    scene.add(topSeaLight);
+
+    // --------------------------------------------------
+    // ANIMATION
+    // --------------------------------------------------
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const time = performance.now() * 0.001;
+
+      jellySpheres.forEach((jelly) => {
+        const d = jelly.userData;
+
+        jelly.position.x = d.baseX + Math.sin(time * 0.45 + d.driftPhase) * d.xAmp;
+        jelly.position.y = d.baseY + Math.sin(time * 0.72 + d.phase) * d.floatAmp;
+        jelly.position.z = d.baseZ + Math.cos(time * 0.38 + d.phase) * d.zAmp;
+
+        d.coreGroup.rotation.y += d.rotY;
+        d.coreGroup.rotation.x += d.rotX;
+
+        d.aura.scale.setScalar(1 + Math.sin(time * 1.2 + d.phase) * 0.03);
+
+        d.ribbonGroup.children.forEach((wrapper) => {
+          wrapper.rotation.y += wrapper.userData.speedY;
+          wrapper.rotation.x += wrapper.userData.speedX;
+
+          const s = 1 + Math.sin(time * 1.3 + wrapper.userData.phase + d.phase) * wrapper.userData.breathe;
+          wrapper.scale.setScalar(s);
+        });
+
+        d.glowDots.children.forEach((mesh) => {
+          mesh.userData.theta += mesh.userData.speed;
+
+          const driftY = Math.sin(time * mesh.userData.verticalSpeed + mesh.userData.phase) * 0.18;
+          const r = mesh.userData.radius;
+
+          mesh.position.x = r * Math.cos(mesh.userData.theta) * Math.sin(mesh.userData.phi);
+          mesh.position.z = r * Math.sin(mesh.userData.theta) * Math.sin(mesh.userData.phi);
+          mesh.position.y = r * Math.cos(mesh.userData.phi) + driftY;
+
+          const pulse = 1 + Math.sin(time * 2.1 + mesh.userData.phase) * 0.24;
+          mesh.scale.setScalar(pulse);
+        });
+      });
+
+      plankton.rotation.y += 0.00016;
+      plankton.rotation.x = Math.sin(time * 0.10) * 0.025;
+
+      keyLight.intensity = 4.0 + Math.sin(time * 0.7) * 0.35;
+      sideGoldLight.intensity = 3.0 + Math.sin(time * 0.85 + 1.3) * 0.28;
+      topSeaLight.intensity = 0.68 + Math.sin(time * 0.40) * 0.10;
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  </script>
+</body>
+</html>

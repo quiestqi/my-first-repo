@@ -1,33 +1,98 @@
-<!DOCTYPE html>                      <!-- Declares this is an HTML5 document -->
-<html lang="en">                     <!-- Root element, lang="en" specifies English language -->
-<head>                               <!-- Contains metadata about the page (not visible) -->
-  <meta charset="UTF-8">             <!-- Sets character encoding for special characters -->
-  <title>Module 1</title>            <!-- Title that appears in browser tab -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">  <!-- Load Google Fonts -->
-  <link rel="stylesheet" href="style.css">  <!-- Links to our CSS file for styling -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Spatial Canvases</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>                               <!-- Contains all visible content on the page -->
-  <header>                           <!-- Header section for navigation/branding -->
-    <div class="left">Columbia GSAPP</div>  <!-- Left side of header with institution name -->
-    <div class="center">             <!-- Center section of header -->
-      Computational Design Practices<br>    <!-- Main title with line break -->
-      <span>Project Archive</span>   <!-- Subtitle in smaller text -->
-    </div>
-    <div class="right"><a href="#">About</a></div>  <!-- Right side with navigation link -->
+
+<body>
+  <header>
+    <h1>Spatial Canvases</h1>
+
+    <p>
+      This project explores computational image-making through 2D and 3D canvases.
+      The four works use fractals, underwater environments, glowing geometries,
+      and symbolic organisms to translate mathematical systems into spatial
+      and atmospheric compositions.
+    </p>
   </header>
 
-  <main>                             <!-- Main content area of the page -->
-    <div class="project-meta">2026</div>     <!-- Project year/date -->
-    <div class="project-title">Computational Design Workflows</div>  <!-- Main project title -->
-    <div class="project-subtitle">Qi Lin </Link></div>  <!-- Student name as subtitle -->
-    
-    <!-- Content sections -->
-    <div class="section-title">Interactive Demo</div>  <!-- Section heading -->
-    <p>Click the button below to see JavaScript in action:</p>  <!-- Instructions for user -->
-    <button id="demoButton">Click Me!</button>  <!-- Interactive button with unique ID -->
-    <div id="messageDisplay"></div>  <!-- Empty container for JavaScript to fill with messages -->
+  <main>
+
+    <!-- THREE.JS CANVAS 1 -->
+    <section class="canvas-section">
+      <div class="text-block">
+        <p class="label">Three.js Canvas 1</p>
+
+        <h2>Golden Mandelbrot Jelly Field</h2>
+
+        <p>
+          This Three.js canvas translates the Mandelbrot set into a field of
+          glowing parametric spheres. Each sphere is generated from fractal
+          iteration values that control surface color, relief, and perforated
+          openings. Orbit camera controls allow the viewer to navigate the
+          floating geometry in 3D space.
+        </p>
+      </div>
+
+      <iframe src="three-01.html" title="Golden Mandelbrot Jelly Field"></iframe>
+    </section>
+
+    <!-- THREE.JS CANVAS 2 -->
+    <section class="canvas-section">
+      <div class="text-block">
+        <p class="label">Three.js Canvas 2</p>
+
+        <h2>Deep-Sea Mandelbrot Tree</h2>
+
+        <p>
+          This canvas focuses on material, lighting, fog, and atmosphere.
+          A large tree-like structure rises from an underwater rock formation,
+          carrying glowing Mandelbrot spheres like luminous fruit. Dramatic
+          spotlights, emissive materials, floating particles, and flowing fog
+          create a deep-sea spatial environment.
+        </p>
+      </div>
+
+      <iframe src="three-02.html" title="Deep-Sea Mandelbrot Tree"></iframe>
+    </section>
+
+    <!-- P5.JS CANVAS 1 -->
+    <section class="canvas-section">
+      <div class="text-block">
+        <p class="label">p5.js Canvas 1</p>
+
+        <h2>Fractal Apparition</h2>
+
+        <p>
+          This static p5.js canvas uses the Mandelbrot set as a visual structure.
+          A pale fantasy palette, soft grain, gold ribbons, and layered texture
+          transform the mathematical image into an atmospheric fractal apparition.
+        </p>
+      </div>
+
+      <iframe src="01.html" title="Fractal Apparition"></iframe>
+    </section>
+
+    <!-- P5.JS CANVAS 2 -->
+    <section class="canvas-section">
+      <div class="text-block">
+        <p class="label">p5.js Canvas 2</p>
+
+        <h2>Urchin Pattern Grid</h2>
+
+        <p>
+          This interactive and animated p5.js canvas turns sea urchins into
+          graphic symbols. Variable grid cells, changing scale, dense outlines,
+          and subtle animation create a patterned spatial surface between
+          ornament, organism, and computation.
+        </p>
+      </div>
+
+      <iframe src="02.html" title="Urchin Pattern Grid"></iframe>
+    </section>
+
   </main>
-  
-  <script src="script.js"></script>  <!-- Links to our JavaScript file for interactivity -->
 </body>
 </html>

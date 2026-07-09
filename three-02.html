@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Deep-Sea Mandelbrot Tree</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #091227;
+      color: #f7efcf;
+      font-family: Arial, sans-serif;
+    }
+
+    h1 {
+      padding: 20px 20px 0 20px;
+      margin: 0;
+      font-size: 22px;
+      font-weight: 400;
+    }
+
+    p {
+      padding: 0 20px;
+      max-width: 780px;
+      color: #ddd4b5;
+      line-height: 1.5;
+    }
+
+    #three-container {
+      width: 720px;
+      height: 400px;
+      margin: 20px;
+      border: 1px solid #f1e0a6;
+      background: #102a66;
+    }
+  </style>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <h1>3D Canvas 2: Deep-Sea Mandelbrot Tree</h1>
+  <p>
+    A deep-sea environment with a large tree-like structure carrying many glowing Mandelbrot spheres.
+    This canvas focuses on materials, lighting, fog, and atmosphere.
+  </p>
+
+  <div id="three-container"></div>
+
+  <script type="module">
+    import * as THREE from "three";
+    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+    const container = document.getElementById("three-container");
+
+    // --------------------------------------------------
+    // SCENE / CAMERA / RENDERER
+    // --------------------------------------------------
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color("#102a66");
+    scene.fog = new THREE.Fog("#0f2558", 6.2, 19.5);
+
+    const camera = new THREE.PerspectiveCamera(
+      55,
+      720 / 400,
+      0.1,
+      1000
+    );
+    camera.position.set(0, 2.2, 15.2);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(720, 400);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.target.set(0, 1.4, 0);
+
+    // --------------------------------------------------
+    // SEEDED RANDOM
+    // --------------------------------------------------
+
+    function mulberry32(a) {
+      return function() {
+        let t = a += 0x6D2B79F5;
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    const rand = mulberry32(20260708);
+
+    function randRange(min, max) {
+      return min + (max - min) * rand();
+    }
+
+    // --------------------------------------------------
+    // LIGHTING
+    // dramatic lighting: key spotlight + rim light + underwater fill
+    // --------------------------------------------------
+
+    const ambientLight = new THREE.AmbientLight("#fff5d1", 0.58);
+    scene.add(ambientLight);
+
+    const topSeaLight = new THREE.DirectionalLight("#9ec6ff", 0.70);
+    topSeaLight.position.set(0, 8, 2);
+    scene.add(topSeaLight);
+
+    const dramaticSpot = new THREE.SpotLight(
+      "#ffe7ad",
+      6.5,
+      42,
+      Math.PI / 6,
+      0.58,
+      1.1
+    );
+    dramaticSpot.position.set(4.6, 8.2, 5.4);
+    dramaticSpot.target.position.set(0, 1.8, 0);
+    scene.add(dramaticSpot);
+    scene.add(dramaticSpot.target);
+
+    const rimSpot = new THREE.SpotLight(
+      "#7fbaff",
+      3.1,
+      34,
+      Math.PI / 4,
+      0.72,
+      1.0
+    );
+    rimSpot.position.set(-6.8, 6.4, -4.8);
+    rimSpot.target.position.set(0, 2.6, 0);
+    scene.add(rimSpot);
+    scene.add(rimSpot.target);
+
+    const warmFrontLight = new THREE.PointLight("#ffd979", 2.8, 34);
+    warmFrontLight.position.set(3.8, 3.9, 7.0);
+    scene.add(warmFrontLight);
+
+    const sideBlueLight = new THREE.PointLight("#78aaff", 1.6, 32);
+    sideBlueLight.position.set(-7, 0.5, 5);
+    scene.add(sideBlueLight);
+
+    const lowFillLight = new THREE.PointLight("#c8e2ff", 0.95, 24);
+    lowFillLight.position.set(0, -2.8, 3);
+    scene.add(lowFillLight);
+
+    const rockGlow = new THREE.PointLight("#f2c14e", 0.8, 14);
+    rockGlow.position.set(0, -2.3, 1.5);
+    scene.add(rockGlow);
+
+    // --------------------------------------------------
+    // SEA FLOOR + ROCKS
+    // --------------------------------------------------
+
+    const floorGeo = new THREE.CircleGeometry(18, 90);
+    const floorMat = new THREE.MeshStandardMaterial({
+      color: "#10244b",
+      roughness: 1.0,
+      metalness: 0.0
+    });
+
+    const seaFloor = new THREE.Mesh(floorGeo, floorMat);
+    seaFloor.rotation.x = -Math.PI / 2;
+    seaFloor.position.y = -3.4;
+    scene.add(seaFloor);
+
+    const moundGeo = new THREE.SphereGeometry(2.8, 40, 24);
+    const moundMat = new THREE.MeshStandardMaterial({
+      color: "#17345f",
+      roughness: 0.96,
+      metalness: 0.02
+    });
+
+    const mound = new THREE.Mesh(moundGeo, moundMat);
+    mound.scale.set(2.05, 0.58, 1.75);
+    mound.position.set(0, -3.05, 0);
+    scene.add(mound);
+
+    const rockGroup = new THREE.Group();
+    scene.add(rockGroup);
+
+    const rockMaterialA = new THREE.MeshStandardMaterial({
+      color: "#1a2948",
+      roughness: 0.98,
+      metalness: 0.02
+    });
+
+    const rockMaterialB = new THREE.MeshStandardMaterial({
+      color: "#22365f",
+      roughness: 0.96,
+      metalness: 0.03
+    });
+
+    function createRock(x, y, z, sx, sy, sz, rotY) {
+      const geo = rand() < 0.5
+        ? new THREE.DodecahedronGeometry(1, 0)
+        : new THREE.IcosahedronGeometry(1, 0);
+
+      const mat = rand() < 0.5 ? rockMaterialA : rockMaterialB;
+      const rock = new THREE.Mesh(geo, mat);
+
+      rock.position.set(x, y, z);
+      rock.scale.set(sx, sy, sz);
+      rock.rotation.set(
+        randRange(-0.25, 0.25),
+        rotY,
+        randRange(-0.18, 0.18)
+      );
+
+      rockGroup.add(rock);
+    }
+
+    createRock(-2.4, -2.85,  0.7, 1.25, 0.85, 1.10, 0.6);
+    createRock( 2.2, -2.78,  0.2, 1.45, 0.92, 1.10, 1.1);
+    createRock(-1.4, -2.92, -1.1, 0.95, 0.70, 0.88, 0.2);
+    createRock( 1.1, -2.98, -1.25, 1.10, 0.72, 0.95, 0.9);
+    createRock(-3.1, -3.00, -0.25, 1.05, 0.75, 0.84, 0.4);
+    createRock( 3.0, -3.06, -0.65, 0.90, 0.68, 0.92, 0.8);
+    createRock(-0.4, -3.14,  1.4, 0.78, 0.52, 0.70, 0.3);
+    createRock( 0.8, -3.10,  1.25, 0.82, 0.55, 0.74, 0.5);
+    createRock(-0.1, -3.18, -1.85, 0.72, 0.48, 0.66, 0.7);
+
+    // --------------------------------------------------
+    // FLOWING MIST VOLUMES
+    // --------------------------------------------------
+
+    const mistGroup = new THREE.Group();
+    scene.add(mistGroup);
+
+    function createMistBlob(x, y, z, sx, sy, sz, color, opacity) {
+      const geo = new THREE.SphereGeometry(1, 24, 18);
+      const mat = new THREE.MeshBasicMaterial({
+        color: color,
+        transparent: true,
+        opacity: opacity,
+        depthWrite: false,
+        side: THREE.DoubleSide
+      });
+
+      const blob = new THREE.Mesh(geo, mat);
+      blob.position.set(x, y, z);
+      blob.scale.set(sx, sy, sz);
+
+      blob.userData = {
+        baseX: x,
+        baseY: y,
+        baseZ: z,
+        baseSX: sx,
+        baseSY: sy,
+        baseSZ: sz,
+        baseOpacity: opacity,
+        phase: randRange(0, Math.PI * 2),
+        speed: randRange(0.18, 0.46),
+        xAmp: randRange(0.12, 0.40),
+        yAmp: randRange(0.05, 0.18),
+        zAmp: randRange(0.08, 0.32),
+        rotSpeed: randRange(-0.003, 0.003),
+        materialRef: mat
+      };
+
+      mistGroup.add(blob);
+    }
+
+    createMistBlob(-1.8, -2.1,  0.4, 1.9, 0.55, 1.2, "#b8d7ff", 0.060);
+    createMistBlob( 1.6, -2.0, -0.3, 2.2, 0.60, 1.4, "#d7e9ff", 0.055);
+    createMistBlob( 0.2, -1.5,  1.0, 1.6, 0.45, 1.1, "#cfe2ff", 0.050);
+    createMistBlob(-0.6, -0.8, -1.1, 1.7, 0.48, 1.0, "#b8d7ff", 0.045);
+    createMistBlob(-2.3,  0.5, -0.6, 2.4, 0.75, 1.7, "#bcdcff", 0.040);
+    createMistBlob( 2.0,  1.0,  0.2, 2.1, 0.68, 1.5, "#dbe9ff", 0.038);
+    createMistBlob( 0.0,  1.8, -0.9, 2.8, 0.78, 1.9, "#c8defe", 0.035);
+    createMistBlob(-1.4,  3.0,  0.4, 1.8, 0.55, 1.3, "#d9ebff", 0.030);
+    createMistBlob( 1.5,  3.6, -0.2, 1.9, 0.58, 1.4, "#c6ddff", 0.028);
+
+    // --------------------------------------------------
+    // MANDELBROT SPHERE GEOMETRY
+    // --------------------------------------------------
+
+    const sphereBaseRadius = 0.34;
+    const displacementStrength = 0.055;
+    const maxIterations = 70;
+    const lonSegments = 72;
+    const latSegments = 44;
+
+    const xMin = -2.15;
+    const xMax = 0.65;
+    const yMin = -1.25;
+    const yMax = 1.25;
+
+    function mandelbrot(cx, cy) {
+      let x = 0.0;
+      let y = 0.0;
+      let iteration = 0;
+
+      while (x * x + y * y <= 4.0 && iteration < maxIterations) {
+        const xtemp = x * x - y * y + cx;
+        y = 2.0 * x * y + cy;
+        x = xtemp;
+        iteration++;
+      }
+
+      return iteration;
+    }
+
+    function normalizedMandelbrot(cx, cy) {
+      const iteration = mandelbrot(cx, cy);
+      if (iteration >= maxIterations) return 1.0;
+      return iteration / maxIterations;
+    }
+
+    function fractalValueFromUV(u, v) {
+      const mx = THREE.MathUtils.lerp(xMin, xMax, u);
+      const my = THREE.MathUtils.lerp(yMin, yMax, v);
+      return normalizedMandelbrot(mx, my);
+    }
+
+    function sphereNormalFromUV(u, v) {
+      const longitude = (u - 0.5) * Math.PI * 2.0;
+      const latitude = (0.5 - v) * Math.PI;
+
+      const x = Math.cos(latitude) * Math.cos(longitude);
+      const y = Math.sin(latitude);
+      const z = Math.cos(latitude) * Math.sin(longitude);
+
+      return new THREE.Vector3(x, y, z).normalize();
+    }
+
+    function radiusFromValue(m) {
+      const boundary = Math.sin(m * Math.PI);
+      const relief = Math.pow(boundary, 1.2) * displacementStrength;
+      return sphereBaseRadius + relief;
+    }
+
+    function getFractalColor(t) {
+      const colDarkAmber = new THREE.Color("#6d4809");
+      const colAmber = new THREE.Color("#a86f10");
+      const colGold = new THREE.Color("#d39a2e");
+      const colLightGold = new THREE.Color("#f1cd62");
+      const colPaleGold = new THREE.Color("#ffe498");
+      const colCream = new THREE.Color("#fff4c8");
+
+      const c = new THREE.Color();
+
+      if (t < 0.18) {
+        c.lerpColors(colDarkAmber, colAmber, t / 0.18);
+      } else if (t < 0.40) {
+        c.lerpColors(colAmber, colGold, (t - 0.18) / 0.22);
+      } else if (t < 0.62) {
+        c.lerpColors(colGold, colLightGold, (t - 0.40) / 0.22);
+      } else if (t < 0.82) {
+        c.lerpColors(colLightGold, colPaleGold, (t - 0.62) / 0.20);
+      } else {
+        c.lerpColors(colPaleGold, colCream, (t - 0.82) / 0.18);
+      }
+
+      return c;
+    }
+
+    function isOpenPatch(u, v) {
+      const m = fractalValueFromUV(u, v);
+
+      if (m < 0.20 || m > 0.90) return false;
+
+      const bandA = Math.abs(Math.sin(m * 24.0 + u * 8.0));
+      const bandB = Math.abs(Math.sin(m * 17.0 - v * 10.0));
+
+      const organic =
+        Math.sin(u * 36.0) * 0.42 +
+        Math.cos(v * 28.0) * 0.32 +
+        Math.sin((u + v) * 40.0) * 0.22;
+
+      return bandA < 0.11 && bandB < 0.30 && organic > 0.24;
+    }
+
+    function buildFractalSphereGeometry() {
+      const positions = [];
+      const colors = [];
+      const indices = [];
+
+      function vertexIndex(i, j) {
+        return j * (lonSegments + 1) + i;
+      }
+
+      for (let j = 0; j <= latSegments; j++) {
+        const v = j / latSegments;
+
+        for (let i = 0; i <= lonSegments; i++) {
+          const u = i / lonSegments;
+
+          const m = fractalValueFromUV(u, v);
+          const n = sphereNormalFromUV(u, v);
+          const r = radiusFromValue(m);
+
+          const p = n.multiplyScalar(r);
+          positions.push(p.x, p.y, p.z);
+
+          const col = getFractalColor(m);
+          colors.push(col.r, col.g, col.b);
+        }
+      }
+
+      for (let j = 0; j < latSegments; j++) {
+        for (let i = 0; i < lonSegments; i++) {
+          const uMid = (i + 0.5) / lonSegments;
+          const vMid = (j + 0.5) / latSegments;
+
+          if (isOpenPatch(uMid, vMid)) continue;
+
+          const a = vertexIndex(i, j);
+          const b = vertexIndex(i + 1, j);
+          const c = vertexIndex(i, j + 1);
+          const d = vertexIndex(i + 1, j + 1);
+
+          indices.push(a, c, b);
+          indices.push(b, c, d);
+        }
+      }
+
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute(
+        "position",
+        new THREE.Float32BufferAttribute(positions, 3)
+      );
+      geometry.setAttribute(
+        "color",
+        new THREE.Float32BufferAttribute(colors, 3)
+      );
+      geometry.setIndex(indices);
+      geometry.computeVertexNormals();
+
+      return geometry;
+    }
+
+    const fractalSphereGeometry = buildFractalSphereGeometry();
+
+    const fruitMaterial = new THREE.MeshStandardMaterial({
+      vertexColors: true,
+      metalness: 0.10,
+      roughness: 0.34,
+      emissive: new THREE.Color("#f2c14e"),
+      emissiveIntensity: 0.42,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.98
+    });
+
+    const fruitWireMaterial = new THREE.MeshBasicMaterial({
+      color: "#fff1b5",
+      wireframe: true,
+      transparent: true,
+      opacity: 0.09
+    });
+
+    // --------------------------------------------------
+    // TREE MATERIALS
+    // --------------------------------------------------
+
+    const trunkMaterial = new THREE.MeshStandardMaterial({
+      color: "#261a14",
+      roughness: 0.95,
+      metalness: 0.03
+    });
+
+    const stemMaterial = new THREE.MeshStandardMaterial({
+      color: "#3a2a22",
+      roughness: 0.92,
+      metalness: 0.02
+    });
+
+    // --------------------------------------------------
+    // TREE HELPERS
+    // --------------------------------------------------
+
+    function cylinderBetween(start, end, rStart, rEnd, material, radialSegments = 10) {
+      const direction = new THREE.Vector3().subVectors(end, start);
+      const length = direction.length();
+
+      const geometry = new THREE.CylinderGeometry(
+        rEnd,
+        rStart,
+        length,
+        radialSegments,
+        1
+      );
+
+      const mesh = new THREE.Mesh(geometry, material);
+
+      const midpoint = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5);
+      mesh.position.copy(midpoint);
+
+      const yAxis = new THREE.Vector3(0, 1, 0);
+      mesh.quaternion.setFromUnitVectors(yAxis, direction.clone().normalize());
+
+      return mesh;
+    }
+
+    function lerpVector(a, b, t) {
+      return new THREE.Vector3(
+        THREE.MathUtils.lerp(a.x, b.x, t),
+        THREE.MathUtils.lerp(a.y, b.y, t),
+        THREE.MathUtils.lerp(a.z, b.z, t)
+      );
+    }
+
+    // --------------------------------------------------
+    // BUILD TREE
+    // --------------------------------------------------
+
+    const treeGroup = new THREE.Group();
+    scene.add(treeGroup);
+
+    const fruitAnchorPoints = [];
+
+    const trunkPoints = [
+      new THREE.Vector3( 0.00, -2.95,  0.00),
+      new THREE.Vector3( 0.15, -1.75,  0.10),
+      new THREE.Vector3(-0.10, -0.35, -0.10),
+      new THREE.Vector3( 0.16,  1.20,  0.12),
+      new THREE.Vector3(-0.08,  2.70, -0.05),
+      new THREE.Vector3( 0.04,  4.05,  0.03),
+      new THREE.Vector3( 0.00,  5.10,  0.00)
+    ];
+
+    const trunkRadii = [0.88, 0.72, 0.58, 0.44, 0.33, 0.22];
+
+    for (let i = 0; i < trunkPoints.length - 1; i++) {
+      const seg = cylinderBetween(
+        trunkPoints[i],
+        trunkPoints[i + 1],
+        trunkRadii[i],
+        trunkRadii[i + 1] || trunkRadii[i] * 0.7,
+        trunkMaterial,
+        14
+      );
+      treeGroup.add(seg);
+    }
+
+    function growBranch(start, direction, length, radius, depth) {
+      const dir = direction.clone().normalize();
+      const end = start.clone().add(dir.multiplyScalar(length));
+
+      const branch = cylinderBetween(
+        start,
+        end,
+        radius,
+        radius * 0.70,
+        trunkMaterial,
+        10
+      );
+      treeGroup.add(branch);
+
+      if (depth <= 1 && rand() < 0.95) {
+        fruitAnchorPoints.push(end.clone());
+      }
+
+      if (depth <= 1 && rand() < 0.45) {
+        fruitAnchorPoints.push(lerpVector(start, end, randRange(0.56, 0.86)));
+      }
+
+      if (depth <= 0) return;
+
+      const childCount = depth === 2 ? 2 : (rand() < 0.65 ? 2 : 1);
+
+      for (let i = 0; i < childCount; i++) {
+        const perturb = new THREE.Vector3(
+          randRange(-0.90, 0.90),
+          randRange(0.10, 0.72),
+          randRange(-0.90, 0.90)
+        ).normalize();
+
+        const newDir = direction.clone().normalize()
+          .multiplyScalar(0.55)
+          .add(perturb.multiplyScalar(0.72))
+          .add(new THREE.Vector3(0, 0.20, 0))
+          .normalize();
+
+        growBranch(
+          end,
+          newDir,
+          length * randRange(0.64, 0.82),
+          radius * 0.68,
+          depth - 1
+        );
+      }
+    }
+
+    function pointOnTrunk(segmentIndex, t) {
+      return lerpVector(trunkPoints[segmentIndex], trunkPoints[segmentIndex + 1], t);
+    }
+
+    const branchAnchors = [
+      { p: pointOnTrunk(1, 0.20), dir: new THREE.Vector3(-1.2, 0.55, -0.42), len: 2.5, rad: 0.22 },
+      { p: pointOnTrunk(1, 0.65), dir: new THREE.Vector3( 1.1, 0.50,  0.35), len: 2.2, rad: 0.20 },
+      { p: pointOnTrunk(2, 0.20), dir: new THREE.Vector3(-1.05, 0.45,  0.68), len: 2.3, rad: 0.18 },
+      { p: pointOnTrunk(2, 0.72), dir: new THREE.Vector3( 1.25, 0.62, -0.24), len: 2.6, rad: 0.18 },
+      { p: pointOnTrunk(3, 0.22), dir: new THREE.Vector3(-1.35, 0.58, -0.18), len: 2.4, rad: 0.16 },
+      { p: pointOnTrunk(3, 0.68), dir: new THREE.Vector3( 1.15, 0.54,  0.55), len: 2.25, rad: 0.15 },
+      { p: pointOnTrunk(4, 0.24), dir: new THREE.Vector3(-0.92, 0.55,  0.18), len: 1.85, rad: 0.12 },
+      { p: pointOnTrunk(4, 0.62), dir: new THREE.Vector3( 1.00, 0.52, -0.22), len: 1.80, rad: 0.12 },
+      { p: pointOnTrunk(5, 0.12), dir: new THREE.Vector3(-0.70, 0.62, -0.12), len: 1.55, rad: 0.10 },
+      { p: pointOnTrunk(5, 0.55), dir: new THREE.Vector3( 0.75, 0.60,  0.10), len: 1.50, rad: 0.10 }
+    ];
+
+    branchAnchors.forEach(anchor => {
+      growBranch(anchor.p, anchor.dir, anchor.len, anchor.rad, 2);
+    });
+
+    // --------------------------------------------------
+    // HANGING FRACTAL FRUITS
+    // --------------------------------------------------
+
+    const fruitHangers = [];
+    const fruitGroup = new THREE.Group();
+    treeGroup.add(fruitGroup);
+
+    function createFruitCluster(anchor, scale = 1) {
+      const hanger = new THREE.Group();
+      hanger.position.copy(anchor);
+
+      const drop = randRange(0.45, 1.28) * scale;
+
+      const stemGeo = new THREE.CylinderGeometry(
+        0.010 * scale,
+        0.015 * scale,
+        drop,
+        8,
+        1
+      );
+
+      const stem = new THREE.Mesh(stemGeo, stemMaterial);
+      stem.position.y = -drop / 2;
+      hanger.add(stem);
+
+      const fruitRoot = new THREE.Group();
+      fruitRoot.position.y = -drop;
+      fruitRoot.scale.setScalar(randRange(0.80, 1.40) * scale);
+      hanger.add(fruitRoot);
+
+      const fruitMesh = new THREE.Mesh(
+        fractalSphereGeometry,
+        fruitMaterial.clone()
+      );
+      fruitRoot.add(fruitMesh);
+
+      const fruitWire = new THREE.Mesh(
+        fractalSphereGeometry,
+        fruitWireMaterial.clone()
+      );
+      fruitWire.scale.set(1.004, 1.004, 1.004);
+      fruitRoot.add(fruitWire);
+
+      const auraGeo = new THREE.SphereGeometry(sphereBaseRadius * 1.20, 32, 24);
+      const auraMat = new THREE.MeshBasicMaterial({
+        color: "#ffe79a",
+        transparent: true,
+        opacity: 0.085,
+        side: THREE.BackSide
+      });
+
+      const aura = new THREE.Mesh(auraGeo, auraMat);
+      fruitRoot.add(aura);
+
+      const localLight = new THREE.PointLight("#ffd86d", 1.35, 3.2);
+      fruitRoot.add(localLight);
+
+      hanger.userData = {
+        phase: randRange(0, Math.PI * 2),
+        swayAmp: randRange(0.05, 0.14),
+        speed: randRange(0.7, 1.3),
+        spinSpeed: randRange(0.002, 0.005),
+        fruitRoot,
+        aura,
+        localLight
+      };
+
+      return hanger;
+    }
+
+    const maxFruits = Math.min(fruitAnchorPoints.length, 34);
+
+    for (let i = 0; i < maxFruits; i++) {
+      const scale = randRange(0.82, 1.18);
+      const hanger = createFruitCluster(fruitAnchorPoints[i], scale);
+      fruitGroup.add(hanger);
+      fruitHangers.push(hanger);
+    }
+
+    // --------------------------------------------------
+    // FREE FLOATING BACKGROUND FRUITS
+    // --------------------------------------------------
+
+    const freeFruitGroup = new THREE.Group();
+    scene.add(freeFruitGroup);
+
+    const freeFruits = [];
+
+    for (let i = 0; i < 10; i++) {
+      const root = new THREE.Group();
+      root.position.set(
+        randRange(-5.5, 5.5),
+        randRange(-1.5, 5.2),
+        randRange(-6.2, -2.0)
+      );
+
+      const s = randRange(0.45, 0.78);
+      root.scale.setScalar(s);
+
+      const fruit = new THREE.Mesh(fractalSphereGeometry, fruitMaterial.clone());
+      root.add(fruit);
+
+      const auraGeo = new THREE.SphereGeometry(sphereBaseRadius * 1.25, 26, 20);
+      const auraMat = new THREE.MeshBasicMaterial({
+        color: "#ffe79a",
+        transparent: true,
+        opacity: 0.06,
+        side: THREE.BackSide
+      });
+
+      const aura = new THREE.Mesh(auraGeo, auraMat);
+      root.add(aura);
+
+      const light = new THREE.PointLight("#ffd86d", 0.95, 2.8);
+      root.add(light);
+
+      root.userData = {
+        baseX: root.position.x,
+        baseY: root.position.y,
+        baseZ: root.position.z,
+        phase: randRange(0, Math.PI * 2),
+        speed: randRange(0.35, 0.8),
+        spinSpeed: randRange(0.0015, 0.0035),
+        aura
+      };
+
+      freeFruitGroup.add(root);
+      freeFruits.push(root);
+    }
+
+    // --------------------------------------------------
+    // UNDERWATER PARTICLES
+    // --------------------------------------------------
+
+    const particleCount = 900;
+    const particlePositions = [];
+    const particleColors = [];
+
+    for (let i = 0; i < particleCount; i++) {
+      particlePositions.push(
+        randRange(-8.5, 8.5),
+        randRange(-3.2, 7.5),
+        randRange(-8.5, 8.5)
+      );
+
+      const c = new THREE.Color(
+        rand() < 0.72 ? "#fff4c8" : "#dbe8ff"
+      );
+
+      particleColors.push(c.r, c.g, c.b);
+    }
+
+    const particleGeometry = new THREE.BufferGeometry();
+    particleGeometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(particlePositions, 3)
+    );
+    particleGeometry.setAttribute(
+      "color",
+      new THREE.Float32BufferAttribute(particleColors, 3)
+    );
+
+    const particleMaterial = new THREE.PointsMaterial({
+      size: 0.03,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.28,
+      depthWrite: false
+    });
+
+    const particles = new THREE.Points(particleGeometry, particleMaterial);
+    scene.add(particles);
+
+    // --------------------------------------------------
+    // ANIMATION
+    // --------------------------------------------------
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const time = performance.now() * 0.001;
+
+      treeGroup.rotation.z = Math.sin(time * 0.22) * 0.03;
+      treeGroup.rotation.x = Math.sin(time * 0.16) * 0.01;
+
+      fruitHangers.forEach((hanger) => {
+        const d = hanger.userData;
+
+        hanger.rotation.z = Math.sin(time * d.speed + d.phase) * d.swayAmp;
+        hanger.rotation.x = Math.cos(time * d.speed * 0.78 + d.phase) * d.swayAmp * 0.55;
+
+        d.fruitRoot.rotation.y += d.spinSpeed;
+        d.fruitRoot.rotation.x += d.spinSpeed * 0.25;
+
+        const pulse = 1 + Math.sin(time * 2.0 + d.phase) * 0.06;
+        d.aura.scale.setScalar(pulse);
+        d.localLight.intensity = 1.12 + Math.sin(time * 1.8 + d.phase) * 0.30;
+      });
+
+      freeFruits.forEach((root) => {
+        const d = root.userData;
+
+        root.position.y = d.baseY + Math.sin(time * d.speed + d.phase) * 0.18;
+        root.position.x = d.baseX + Math.cos(time * d.speed * 0.6 + d.phase) * 0.10;
+        root.rotation.y += d.spinSpeed;
+
+        d.aura.scale.setScalar(1 + Math.sin(time * 1.6 + d.phase) * 0.05);
+      });
+
+      mistGroup.children.forEach((blob) => {
+        const d = blob.userData;
+
+        blob.position.x = d.baseX + Math.sin(time * d.speed + d.phase) * d.xAmp;
+        blob.position.y = d.baseY + Math.cos(time * d.speed * 0.72 + d.phase) * d.yAmp;
+        blob.position.z = d.baseZ + Math.sin(time * d.speed * 0.55 + d.phase) * d.zAmp;
+
+        blob.rotation.y += d.rotSpeed;
+        blob.rotation.x += d.rotSpeed * 0.35;
+
+        const breathe = 1 + Math.sin(time * 0.65 + d.phase) * 0.045;
+
+        blob.scale.set(
+          d.baseSX * breathe,
+          d.baseSY * (1 + Math.sin(time * 0.45 + d.phase) * 0.03),
+          d.baseSZ * breathe
+        );
+
+        d.materialRef.opacity =
+          d.baseOpacity + Math.sin(time * 0.75 + d.phase) * 0.010;
+      });
+
+      particles.rotation.y += 0.00018;
+      particles.rotation.x = Math.sin(time * 0.11) * 0.02;
+
+      dramaticSpot.intensity = 6.2 + Math.sin(time * 0.60) * 0.35;
+      rimSpot.intensity = 3.0 + Math.sin(time * 0.55 + 1.2) * 0.18;
+      warmFrontLight.intensity = 2.7 + Math.sin(time * 0.80) * 0.20;
+      sideBlueLight.intensity = 1.5 + Math.sin(time * 0.55 + 1.3) * 0.12;
+      topSeaLight.intensity = 0.68 + Math.sin(time * 0.35) * 0.06;
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
