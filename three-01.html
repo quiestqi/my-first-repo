@@ -5,33 +5,25 @@
   <title>Golden Mandelbrot Jelly Field</title>
 
   <style>
-    body {
+    html, body {
       margin: 0;
-      background: #0b1330;
-      color: #f6efcf;
-      font-family: Arial, sans-serif;
-    }
-
-    h1 {
-      padding: 20px 20px 0 20px;
-      margin: 0;
-      font-size: 22px;
-      font-weight: 400;
-    }
-
-    p {
-      padding: 0 20px;
-      max-width: 760px;
-      color: #ddd4b4;
-      line-height: 1.5;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #17367d;
     }
 
     #three-container {
-      width: 720px;
-      height: 400px;
-      margin: 20px;
-      border: 1px solid #f1e0a6;
+      width: 100vw;
+      height: 100vh;
+      margin: 0;
+      border: none;
       background: #17367d;
+    }
+
+    canvas {
+      display: block;
     }
   </style>
 
@@ -46,12 +38,6 @@
 </head>
 
 <body>
-  <h1>3D Canvas 1: Golden Mandelbrot Jelly Field</h1>
-  <p>
-    A field of glowing Mandelbrot-based spheres suspended in water like a school of luminous jelly-organisms,
-    with perforated openings, fractal surface lines, orbiting ribbons, and drifting underwater particles.
-  </p>
-
   <div id="three-container"></div>
 
   <script type="module">
@@ -70,14 +56,14 @@
 
     const camera = new THREE.PerspectiveCamera(
       55,
-      720 / 400,
+      container.clientWidth / container.clientHeight,
       0.1,
       1000
     );
     camera.position.set(0, 0.0, 9.3);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(720, 400);
+    renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     container.appendChild(renderer.domElement);
 
@@ -268,7 +254,7 @@
     baseGeometry.computeVertexNormals();
 
     // --------------------------------------------------
-    // BASE MATERIALS
+    // MATERIALS
     // --------------------------------------------------
 
     const sphereMaterial = new THREE.MeshStandardMaterial({
@@ -595,7 +581,7 @@
     }
 
     // --------------------------------------------------
-    // MORE SPHERES, MORE SPATIALLY SCATTERED
+    // OBJECTS
     // --------------------------------------------------
 
     const jellySpecs = [
@@ -621,7 +607,7 @@
     });
 
     // --------------------------------------------------
-    // GLOBAL UNDERWATER PARTICLES
+    // PARTICLES
     // --------------------------------------------------
 
     const planktonCount = 620;
@@ -685,6 +671,23 @@
     const topSeaLight = new THREE.DirectionalLight("#9ec6ff", 0.72);
     topSeaLight.position.set(0, 5, 2);
     scene.add(topSeaLight);
+
+    // --------------------------------------------------
+    // RESIZE
+    // --------------------------------------------------
+
+    function resizeRendererToContainer() {
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+
+      renderer.setSize(width, height);
+    }
+
+    window.addEventListener("resize", resizeRendererToContainer);
+    resizeRendererToContainer();
 
     // --------------------------------------------------
     // ANIMATION
