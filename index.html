@@ -2,97 +2,221 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Spatial Canvases</title>
+  <title>Spatial Canvases Gallery</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <header>
-    <h1>Spatial Canvases</h1>
+  <div class="custom-cursor" id="customCursor"></div>
 
-    <p>
-      This project explores computational image-making through 2D and 3D canvases.
-      The four works use fractals, underwater environments, glowing geometries,
-      and symbolic organisms to translate mathematical systems into spatial
-      and atmospheric compositions.
-    </p>
+  <header class="site-header">
+    <div class="header-left">
+      <p class="course-label">Computational Design Workflows</p>
+      <h1>Spatial<br>Canvases</h1>
+    </div>
+
+    <div class="header-right">
+      <p>
+        This gallery presents four computational canvases made with p5.js and Three.js.
+        The works explore fractals, underwater environments, glowing geometries,
+        symbolic organisms, lighting, fog, and spatial atmosphere.
+      </p>
+    </div>
   </header>
 
   <main>
 
-    <!-- P5.JS CANVAS 1 -->
-    <section class="canvas-section">
-      <div class="text-block">
-        <p class="label">p5.js Canvas 1</p>
+    <section class="gallery-intro">
+      <p class="section-label">Gallery Index</p>
+      <p>
+        Rotate through the four canvases and select one to view it in the main frame.
+      </p>
+    </section>
 
-        <h2>Fractal Apparition</h2>
+    <section class="carousel-section">
+      <button class="nav-button" id="prevButton">←</button>
 
-        <p>
+      <div class="carousel-stage">
+        <div class="carousel" id="carousel">
+
+          <article class="gallery-card active" data-index="0">
+            <p class="card-number">01</p>
+            <p class="card-type">p5.js Canvas</p>
+            <h2>Fractal Apparition</h2>
+            <p>
+              A static Mandelbrot drawing transformed through pale color,
+              grain, gold ribbons, and atmospheric texture.
+            </p>
+          </article>
+
+          <article class="gallery-card" data-index="1">
+            <p class="card-number">02</p>
+            <p class="card-type">p5.js Canvas</p>
+            <h2>Urchin Pattern Grid</h2>
+            <p>
+              An animated graphic pattern that turns sea urchins into symbolic
+              computational ornaments.
+            </p>
+          </article>
+
+          <article class="gallery-card" data-index="2">
+            <p class="card-number">03</p>
+            <p class="card-type">Three.js Canvas</p>
+            <h2>Golden Mandelbrot Jelly Field</h2>
+            <p>
+              A field of glowing Mandelbrot-based parametric spheres floating
+              in a deep underwater space.
+            </p>
+          </article>
+
+          <article class="gallery-card" data-index="3">
+            <p class="card-number">04</p>
+            <p class="card-type">Three.js Canvas</p>
+            <h2>Deep-Sea Mandelbrot Tree</h2>
+            <p>
+              A large underwater tree carrying luminous Mandelbrot spheres,
+              with dramatic lighting and flowing fog.
+            </p>
+          </article>
+
+        </div>
+      </div>
+
+      <button class="nav-button" id="nextButton">→</button>
+    </section>
+
+    <section class="viewer-section">
+      <div class="viewer-text">
+        <p class="section-label" id="viewerType">p5.js Canvas 1</p>
+        <h2 id="viewerTitle">Fractal Apparition</h2>
+        <p id="viewerDescription">
           This static p5.js canvas uses the Mandelbrot set as a visual structure.
           A pale fantasy palette, soft grain, gold ribbons, and layered texture
           transform the mathematical image into an atmospheric fractal apparition.
         </p>
       </div>
 
-      <iframe src="p5-01/01.html" title="Fractal Apparition"></iframe>
-    </section>
-
-    <!-- P5.JS CANVAS 2 -->
-    <section class="canvas-section">
-      <div class="text-block">
-        <p class="label">p5.js Canvas 2</p>
-
-        <h2>Urchin Pattern Grid</h2>
-
-        <p>
-          This interactive and animated p5.js canvas turns sea urchins into
-          graphic symbols. Variable grid cells, changing scale, dense outlines,
-          and subtle animation create a patterned spatial surface between
-          ornament, organism, and computation.
-        </p>
-      </div>
-
-      <iframe src="p5-02/02.html" title="Urchin Pattern Grid"></iframe>
-    </section>
-
-    <!-- THREE.JS CANVAS 1 -->
-    <section class="canvas-section">
-      <div class="text-block">
-        <p class="label">Three.js Canvas 1</p>
-
-        <h2>Golden Mandelbrot Jelly Field</h2>
-
-        <p>
-          This Three.js canvas translates the Mandelbrot set into a field of
-          glowing parametric spheres. Each sphere is generated from fractal
-          iteration values that control surface color, relief, and perforated
-          openings. Orbit camera controls allow the viewer to navigate the
-          floating geometry in 3D space.
-        </p>
-      </div>
-
-      <iframe src="three-01.html" title="Golden Mandelbrot Jelly Field"></iframe>
-    </section>
-
-    <!-- THREE.JS CANVAS 2 -->
-    <section class="canvas-section">
-      <div class="text-block">
-        <p class="label">Three.js Canvas 2</p>
-
-        <h2>Deep-Sea Mandelbrot Tree</h2>
-
-        <p>
-          This canvas focuses on material, lighting, fog, and atmosphere.
-          A large tree-like structure rises from an underwater rock formation,
-          carrying glowing Mandelbrot spheres like luminous fruit. Dramatic
-          spotlights, emissive materials, floating particles, and flowing fog
-          create a deep-sea spatial environment.
-        </p>
-      </div>
-
-      <iframe src="three-02.html" title="Deep-Sea Mandelbrot Tree"></iframe>
+      <iframe id="canvasViewer" src="p5-01/01.html" title="Selected Canvas"></iframe>
     </section>
 
   </main>
+
+  <script>
+    const works = [
+      {
+        type: "p5.js Canvas 1",
+        title: "Fractal Apparition",
+        description:
+          "This static p5.js canvas uses the Mandelbrot set as a visual structure. A pale fantasy palette, soft grain, gold ribbons, and layered texture transform the mathematical image into an atmospheric fractal apparition.",
+        src: "p5-01/01.html"
+      },
+      {
+        type: "p5.js Canvas 2",
+        title: "Urchin Pattern Grid",
+        description:
+          "This interactive and animated p5.js canvas turns sea urchins into graphic symbols. Variable grid cells, changing scale, dense outlines, and subtle animation create a patterned spatial surface between ornament, organism, and computation.",
+        src: "p5-02/02.html"
+      },
+      {
+        type: "Three.js Canvas 1",
+        title: "Golden Mandelbrot Jelly Field",
+        description:
+          "This Three.js canvas translates the Mandelbrot set into a field of glowing parametric spheres. Each sphere is generated from fractal iteration values that control surface color, relief, and perforated openings. Orbit camera controls allow the viewer to navigate the floating geometry in 3D space.",
+        src: "three-01.html"
+      },
+      {
+        type: "Three.js Canvas 2",
+        title: "Deep-Sea Mandelbrot Tree",
+        description:
+          "This canvas focuses on material, lighting, fog, and atmosphere. A large tree-like structure rises from an underwater rock formation, carrying glowing Mandelbrot spheres like luminous fruit. Dramatic spotlights, emissive materials, floating particles, and flowing fog create a deep-sea spatial environment.",
+        src: "three-02.html"
+      }
+    ];
+
+    const carousel = document.getElementById("carousel");
+    const cards = document.querySelectorAll(".gallery-card");
+    const prevButton = document.getElementById("prevButton");
+    const nextButton = document.getElementById("nextButton");
+
+    const viewerType = document.getElementById("viewerType");
+    const viewerTitle = document.getElementById("viewerTitle");
+    const viewerDescription = document.getElementById("viewerDescription");
+    const canvasViewer = document.getElementById("canvasViewer");
+
+    let currentIndex = 0;
+    const total = works.length;
+    const angleStep = 360 / total;
+
+    function updateGallery() {
+      const rotation = currentIndex * -angleStep;
+      carousel.style.transform = `rotateY(${rotation}deg)`;
+
+      cards.forEach((card, index) => {
+        card.classList.toggle("active", index === currentIndex);
+      });
+
+      const currentWork = works[currentIndex];
+      viewerType.textContent = currentWork.type;
+      viewerTitle.textContent = currentWork.title;
+      viewerDescription.textContent = currentWork.description;
+      canvasViewer.src = currentWork.src;
+    }
+
+    function nextWork() {
+      currentIndex = (currentIndex + 1) % total;
+      updateGallery();
+    }
+
+    function prevWork() {
+      currentIndex = (currentIndex - 1 + total) % total;
+      updateGallery();
+    }
+
+    nextButton.addEventListener("click", nextWork);
+    prevButton.addEventListener("click", prevWork);
+
+    cards.forEach((card) => {
+      card.addEventListener("click", () => {
+        currentIndex = Number(card.dataset.index);
+        updateGallery();
+      });
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight") {
+        nextWork();
+      }
+
+      if (event.key === "ArrowLeft") {
+        prevWork();
+      }
+    });
+
+    // CUSTOM RED SQUARE CURSOR
+    const customCursor = document.getElementById("customCursor");
+
+    document.addEventListener("mousemove", (event) => {
+      customCursor.style.left = event.clientX + "px";
+      customCursor.style.top = event.clientY + "px";
+    });
+
+    document.addEventListener("mousedown", () => {
+      customCursor.classList.add("clicking");
+    });
+
+    document.addEventListener("mouseup", () => {
+      customCursor.classList.remove("clicking");
+    });
+
+    document.addEventListener("mouseleave", () => {
+      customCursor.classList.add("hidden");
+    });
+
+    document.addEventListener("mouseenter", () => {
+      customCursor.classList.remove("hidden");
+    });
+
+    updateGallery();
+  </script>
 </body>
 </html>
