@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "my-first-repo",
+			"path": "."
+		},
+		{
+			"name": "when-new-york-blooms-dreamscape",
+			"path": "../when-new-york-blooms-dreamscape"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "my-first-repo"
+	}
+}

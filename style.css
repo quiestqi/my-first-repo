@@ -472,3 +472,15 @@ iframe {
     box-shadow: 8px 8px 0 #111111;
   }
 }
+.viewer-frame {
+  overflow: hidden;
+}
+
+.viewer-frame iframe {
+  overflow: hidden;
+  scrollbar-width: none;
+}
+
+.viewer-frame iframe::-webkit-scrollbar {
+  display: none;
+}
