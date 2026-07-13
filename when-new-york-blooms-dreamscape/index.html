@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>When New York Blooms</title>
+
+  <!-- Botanical serif + clean sans-serif -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet"
+    
+  >
+  
+
+  <style>
+    :root {
+      --bg: #eaf1e5;
+      --bg-light: #f5f8f1;
+      --bg-deep: #e3ecdd;
+
+      --ink: #23452f;
+      --ink-soft: #3f624a;
+      --muted: #637c69;
+
+      --grid: rgba(48, 82, 58, 0.11);
+      --border: rgba(48, 82, 58, 0.17);
+
+      --panel: rgba(246, 249, 242, 0.72);
+
+      --cream: #fff5e9;
+      --lav: #b9b4e3;
+      --sage: #a8bd87;
+      --gold: #e9b85f;
+      --coral: #e28766;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--bg);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+
+      color: var(--ink);
+
+      font-family:
+        "DM Sans",
+        Helvetica,
+        Arial,
+        sans-serif;
+
+      background:
+        radial-gradient(
+          circle at 14% 8%,
+          rgba(255, 255, 255, 0.82),
+          transparent 28%
+        ),
+        radial-gradient(
+          circle at 82% 16%,
+          rgba(190, 210, 177, 0.22),
+          transparent 28%
+        ),
+        radial-gradient(
+          circle at 72% 82%,
+          rgba(217, 228, 207, 0.3),
+          transparent 30%
+        ),
+        linear-gradient(
+          180deg,
+          var(--bg-light) 0%,
+          var(--bg) 45%,
+          var(--bg-deep) 100%
+        );
+
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+
+      position: fixed;
+      inset: 0;
+
+      pointer-events: none;
+
+      background:
+        radial-gradient(
+          circle at 25% 32%,
+          rgba(255, 255, 255, 0.26),
+          transparent 20%
+        ),
+        radial-gradient(
+          circle at 66% 24%,
+          rgba(226, 236, 217, 0.2),
+          transparent 18%
+        ),
+        radial-gradient(
+          circle at 42% 78%,
+          rgba(168, 189, 135, 0.11),
+          transparent 20%
+        );
+
+      mix-blend-mode: screen;
+      opacity: 0.85;
+    }
+
+    body::after {
+      content: "";
+
+      position: fixed;
+      inset: 0;
+
+      pointer-events: none;
+
+      background-image:
+        linear-gradient(
+          rgba(32, 68, 44, 0.018) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(32, 68, 44, 0.014) 1px,
+          transparent 1px
+        );
+
+      background-size: 4px 4px;
+      opacity: 0.32;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+
+      width: min(1500px, calc(100% - 40px));
+      margin: auto;
+      padding: 44px 0 28px;
+    }
+
+    .eyebrow {
+      color: var(--muted);
+
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 8px 0 13px;
+
+      color: var(--ink);
+
+      font-family:
+        "Cormorant Garamond",
+        Georgia,
+        serif;
+
+      font-size: clamp(54px, 7.4vw, 112px);
+      font-weight: 500;
+      line-height: 0.88;
+      letter-spacing: -0.052em;
+
+      text-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.55);
+    }
+
+    .sub {
+      max-width: 760px;
+      margin: 0 0 30px;
+
+      color: var(--ink-soft);
+
+      font-family:
+        "Cormorant Garamond",
+        Georgia,
+        serif;
+
+      font-size: clamp(20px, 2vw, 26px);
+      font-weight: 400;
+      line-height: 1.35;
+      letter-spacing: -0.012em;
+    }
+
+    .panel {
+      position: relative;
+
+      padding: 22px 22px 16px;
+
+      border: 1px solid var(--border);
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(248, 251, 245, 0.79),
+          rgba(238, 245, 233, 0.67)
+        );
+
+      backdrop-filter: blur(18px);
+
+      box-shadow:
+        0 24px 70px rgba(37, 73, 48, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.68);
+    }
+
+    .head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+
+      gap: 24px;
+      margin-bottom: 10px;
+    }
+
+    .head h2 {
+      margin: 0 0 6px;
+
+      color: var(--ink);
+
+      font-family:
+        "DM Sans",
+        Helvetica,
+        Arial,
+        sans-serif;
+
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .head p,
+    .hint,
+    .note {
+      margin: 0;
+
+      color: var(--muted);
+
+      font-family:
+        "DM Sans",
+        Helvetica,
+        Arial,
+        sans-serif;
+
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .hint {
+      white-space: nowrap;
+    }
+
+    .chart-wrap {
+      min-height: 690px;
+      overflow-x: auto;
+    }
+
+    .loading {
+      display: grid;
+      min-height: 690px;
+
+      place-items: center;
+
+      color: var(--muted);
+
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .chart {
+      display: block;
+
+      width: 100%;
+      min-width: 1120px;
+      height: auto;
+    }
+
+    .month-grid {
+      stroke: var(--grid);
+      stroke-width: 0.8;
+    }
+
+    .baseline {
+      stroke: rgba(48, 82, 58, 0.065);
+      stroke-width: 0.7;
+    }
+
+    .timeline {
+      stroke: rgba(40, 74, 50, 0.48);
+      stroke-width: 0.8;
+    }
+
+    .month {
+      fill: #466650;
+
+      font-family:
+        "DM Sans",
+        Helvetica,
+        Arial,
+        sans-serif;
+
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.13em;
+    }
+
+    .label {
+      font-family:
+        "DM Sans",
+        Helvetica,
+        Arial,
+        sans-serif;
+
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.015em;
+
+      transition:
+        opacity 0.18s,
+        font-weight 0.18s;
+    }
+
+    .ridge {
+      fill: none;
+
+      stroke-width: 1.25;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+
+      opacity: 0.9;
+      cursor: crosshair;
+
+      transition:
+        opacity 0.18s,
+        stroke-width 0.18s,
+        filter 0.18s;
+    }
+
+    .ridge.active {
+      stroke-width: 3.2;
+
+      filter:
+        drop-shadow(
+          0 0 7px rgba(83, 117, 84, 0.38)
+        );
+    }
+
+    .muted {
+      opacity: 0.09;
+    }
+
+    .label.active {
+      font-weight: 700;
+      opacity: 1;
+    }
+
+    .tooltip {
+      position: fixed;
+      z-index: 10;
+
+      width: min(280px, calc(100vw - 32px));
+      padding: 14px 15px;
+
+      border: 1px solid rgba(45, 79, 54, 0.22);
+
+      background:
+        rgba(244, 249, 240, 0.95);
+
+      color: var(--ink);
+
+      pointer-events: none;
+      opacity: 0;
+
+      transition: opacity 0.12s;
+      backdrop-filter: blur(14px);
+
+      box-shadow:
+        0 14px 38px rgba(40, 73, 49, 0.13);
+    }
+
+    .tooltip.show {
+      opacity: 1;
+    }
+
+    .tname {
+      margin-bottom: 8px;
+
+      color: var(--ink);
+
+      font-family:
+        "Cormorant Garamond",
+        Georgia,
+        serif;
+
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .trow {
+      display: grid;
+      grid-template-columns: 74px 1fr;
+
+      gap: 10px;
+      padding: 3px 0;
+
+      color: var(--muted);
+
+      font-size: 12px;
+    }
+
+    .trow strong {
+      color: var(--ink-soft);
+      font-weight: 500;
+    }
+
+    .note {
+      max-width: 800px;
+      padding: 15px 2px 0;
+
+      color: var(--ink-soft);
+    }
+
+    /*
+      Keep the original subtle star details,
+      but recolor them to pale botanical green.
+    */
+    .panel::before,
+    .panel::after {
+      content: "✦";
+
+      position: absolute;
+
+      color: rgba(114, 145, 102, 0.45);
+
+      font-size: 18px;
+
+      pointer-events: none;
+
+      text-shadow:
+        0 0 10px rgba(179, 202, 162, 0.34);
+    }
+
+    .panel::before {
+      top: 18px;
+      right: 24px;
+    }
+
+    .panel::after {
+      bottom: 20px;
+      left: 28px;
+
+      font-size: 13px;
+      opacity: 0.65;
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        width: calc(100% - 24px);
+        padding-top: 26px;
+      }
+
+      .panel {
+        padding: 16px 10px;
+      }
+
+      .head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .hint {
+        white-space: normal;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+
+    <div class="eyebrow">
+      D3.js · Temporal Structures
+    </div>
+
+    <h1>
+      When New York Blooms
+    </h1>
+
+    <p class="sub">
+      Seasonal blooming rhythms of thirty flowering species across one
+      calendar year in New York City.
+    </p>
+
+    <section class="panel">
+
+      <div class="head">
+        <div>
+          <h2>
+            A Temporal Atlas of Bloom
+          </h2>
+
+          <p>
+            Horizontal position maps time; wave height represents
+            approximate bloom intensity.
+          </p>
+        </div>
+
+        <div class="hint">
+          Hover over a line to isolate one species
+        </div>
+      </div>
+
+      <div id="chart" class="chart-wrap">
+        <div class="loading">
+          Loading bloom data…
+        </div>
+      </div>
+
+      <div id="tooltip" class="tooltip"></div>
+
+    </section>
+
+    <p class="note">
+      Approximate bloom periods are synthesized from typical seasonal
+      patterns in New York City. Actual flowering dates vary with weather
+      and microclimate.
+    </p>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+
+  <script>
+    const names = [
+      "Snowdrop",
+      "Winter Aconite",
+      "Witch Hazel",
+      "Crocus",
+      "Daffodil",
+      "Magnolia",
+      "Cherry Blossom",
+      "Crabapple",
+      "Dogwood",
+      "Tulip",
+      "Lilac",
+      "Azalea",
+      "Wisteria",
+      "Allium",
+      "Peony",
+      "Iris",
+      "Rose",
+      "Lavender",
+      "Foxglove",
+      "Bee Balm",
+      "Coneflower",
+      "Hydrangea",
+      "Sunflower",
+      "Black-eyed Susan",
+      "Phlox",
+      "Hibiscus",
+      "Goldenrod",
+      "Aster",
+      "Japanese Anemone",
+      "Chrysanthemum"
+    ];
+
+    const colors = [
+      "#F6EDE4",
+      "#E8C867",
+      "#E2B65A",
+      "#B9AEDF",
+      "#F0D36E",
+      "#E3B8C8",
+      "#F0B8CA",
+      "#F2C7D2",
+      "#EFE9DF",
+      "#E98D82",
+      "#C7A7DA",
+      "#E8A0BD",
+      "#BFAEE3",
+      "#AFA0D5",
+      "#E29AB9",
+      "#A7B7E6",
+      "#D97878",
+      "#B4A8D8",
+      "#D6A5CF",
+      "#E7858D",
+      "#D89AB8",
+      "#A9B9E4",
+      "#F0C56E",
+      "#D8A94F",
+      "#E3A8C4",
+      "#EC8D74",
+      "#E2B35D",
+      "#B9A8D4",
+      "#F4E7DF",
+      "#D98963"
+    ];
+
+    const months = [
+      { day: 0, label: "JAN" },
+      { day: 31, label: "FEB" },
+      { day: 59, label: "MAR" },
+      { day: 90, label: "APR" },
+      { day: 120, label: "MAY" },
+      { day: 151, label: "JUN" },
+      { day: 181, label: "JUL" },
+      { day: 212, label: "AUG" },
+      { day: 243, label: "SEP" },
+      { day: 273, label: "OCT" },
+      { day: 304, label: "NOV" },
+      { day: 334, label: "DEC" }
+    ];
+
+    const root = d3.select("#chart");
+    const tip = d3.select("#tooltip");
+
+    Promise.all([
+      d3.text("flowers.csv"),
+      d3.csv("flowers_metadata.csv", d3.autoType)
+    ])
+      .then(([text, meta]) => {
+        const matrix = d3.csvParseRows(
+          text,
+          row => row.map(Number)
+        );
+
+        render(matrix, meta);
+      })
+      .catch(err => {
+        console.error(err);
+
+        root.html(`
+          <div class="loading">
+            Unable to load CSV files. Open this folder with Live Server.
+          </div>
+        `);
+      });
+
+    function render(matrix, meta) {
+      root.selectAll("*").remove();
+
+      const width = 1360;
+      const height = 1080;
+
+      const margin = {
+        top: 58,
+        right: 28,
+        bottom: 70,
+        left: 178
+      };
+
+      const overlap = 2.45;
+
+      const x = d3
+        .scaleLinear()
+        .domain([0, 364])
+        .range([
+          margin.left,
+          width - margin.right
+        ]);
+
+      const z = d3
+        .scalePoint()
+        .domain(d3.range(matrix.length))
+        .range([
+          margin.top,
+          height - margin.bottom
+        ])
+        .padding(0.22);
+
+      const y = d3
+        .scaleLinear()
+        .domain([
+          0,
+          d3.max(matrix.flat())
+        ])
+        .range([
+          0,
+          -overlap * z.step()
+        ]);
+
+      const line = d3
+        .line()
+        .curve(d3.curveBasis)
+        .x((d, i) => x(i))
+        .y(d => y(Math.max(0, d)));
+
+      const svg = root
+        .append("svg")
+        .attr("class", "chart")
+        .attr(
+          "viewBox",
+          `0 0 ${width} ${height}`
+        )
+        .attr("role", "img")
+        .attr(
+          "aria-label",
+          "Thirty ridgeline plots of flowering intensity across one year in New York City."
+        );
+
+      svg
+        .append("g")
+        .selectAll("line")
+        .data(months)
+        .join("line")
+        .attr("class", "month-grid")
+        .attr("x1", d => x(d.day))
+        .attr("x2", d => x(d.day))
+        .attr("y1", margin.top - 20)
+        .attr(
+          "y2",
+          height - margin.bottom + 13
+        );
+
+      svg
+        .append("g")
+        .selectAll("line")
+        .data(d3.range(matrix.length))
+        .join("line")
+        .attr("class", "baseline")
+        .attr("x1", margin.left)
+        .attr("x2", width - margin.right)
+        .attr("y1", d => z(d))
+        .attr("y2", d => z(d));
+
+      const paths = svg
+        .append("g")
+        .selectAll("path")
+        .data(matrix)
+        .join("path")
+        .attr("class", "ridge")
+        .attr(
+          "transform",
+          (_, i) => `translate(0,${z(i)})`
+        )
+        .attr("d", line)
+        .attr(
+          "stroke",
+          (_, i) => colors[i]
+        );
+
+      const labels = svg
+        .append("g")
+        .selectAll("text")
+        .data(names)
+        .join("text")
+        .attr("class", "label")
+        .attr("x", margin.left - 14)
+        .attr(
+          "y",
+          (_, i) => z(i) + 3
+        )
+        .attr("text-anchor", "end")
+        .attr(
+          "fill",
+          (_, i) => colors[i]
+        )
+        .text(d => d);
+
+      svg
+        .append("line")
+        .attr("class", "timeline")
+        .attr("x1", margin.left)
+        .attr("x2", width - margin.right)
+        .attr(
+          "y1",
+          height - margin.bottom + 17
+        )
+        .attr(
+          "y2",
+          height - margin.bottom + 17
+        );
+
+      svg
+        .append("g")
+        .selectAll("text")
+        .data(months)
+        .join("text")
+        .attr("class", "month")
+        .attr("x", d => x(d.day))
+        .attr("y", height - 22)
+        .attr("text-anchor", "start")
+        .text(d => d.label);
+
+      paths
+        .on("mouseenter", function (e, row) {
+          const i = matrix.indexOf(row);
+
+          activate(i);
+          show(e, i, meta[i]);
+        })
+        .on("mousemove", move)
+        .on("mouseleave", clear);
+
+      labels
+        .on("mouseenter", function (e, name) {
+          const i = names.indexOf(name);
+
+          activate(i);
+          show(e, i, meta[i]);
+        })
+        .on("mousemove", move)
+        .on("mouseleave", clear);
+
+      function activate(i) {
+        paths
+          .classed(
+            "active",
+            (_, j) => j === i
+          )
+          .classed(
+            "muted",
+            (_, j) => j !== i
+          );
+
+        labels
+          .classed(
+            "active",
+            (_, j) => j === i
+          )
+          .classed(
+            "muted",
+            (_, j) => j !== i
+          );
+
+        paths
+          .filter((_, j) => j === i)
+          .raise();
+      }
+
+      function clear() {
+        paths
+          .classed("active", false)
+          .classed("muted", false);
+
+        labels
+          .classed("active", false)
+          .classed("muted", false);
+
+        tip.classed("show", false);
+      }
+    }
+
+    function show(e, i, m = {}) {
+      tip
+        .html(`
+          <div class="tname">
+            ${names[i]}
+          </div>
+
+          <div class="trow">
+            <span>Bloom</span>
+            <strong>
+              ${fmt(m.start_date)} – ${fmt(m.end_date)}
+            </strong>
+          </div>
+
+          <div class="trow">
+            <span>Peak</span>
+            <strong>
+              ${fmt(m.peak_date)}
+            </strong>
+          </div>
+
+          <div class="trow">
+            <span>Location</span>
+            <strong>
+              ${m.location || "New York City"}
+            </strong>
+          </div>
+        `)
+        .classed("show", true);
+
+      move(e);
+    }
+
+    function move(e) {
+      const n = tip.node();
+
+      const w = n.offsetWidth || 280;
+      const h = n.offsetHeight || 130;
+
+      let l = e.clientX + 14;
+      let t = e.clientY + 14;
+
+      if (l + w + 18 > innerWidth) {
+        l = e.clientX - w - 14;
+      }
+
+      if (t + h + 18 > innerHeight) {
+        t = e.clientY - h - 14;
+      }
+
+      tip
+        .style("left", `${l}px`)
+        .style("top", `${t}px`);
+    }
+
+    function fmt(v) {
+      if (!v) {
+        return "Approximate";
+      }
+
+      const d =
+        v instanceof Date
+          ? v
+          : new Date(`${v}T00:00:00`);
+
+      return d3.timeFormat("%b %-d")(d);
+    }
+  </script>
+</body>
+</html>

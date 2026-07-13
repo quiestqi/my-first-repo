@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Spatial Canvases Gallery</title>
+
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -12,14 +15,19 @@
   <header class="site-header">
     <div class="header-left">
       <p class="course-label">Computational Design Workflows</p>
-      <h1>Spatial<br>Canvases</h1>
+
+      <h1>
+        Spatial<br>
+        Canvases
+      </h1>
     </div>
 
     <div class="header-right">
       <p>
-        This gallery presents four computational canvases made with p5.js and Three.js.
-        The works explore fractals, underwater environments, glowing geometries,
-        symbolic organisms, lighting, fog, and spatial atmosphere.
+        This gallery presents five computational canvases made with p5.js,
+        Three.js, and D3.js. The works explore fractals, underwater environments,
+        glowing geometries, symbolic organisms, temporal data, flowering cycles,
+        lighting, fog, and spatial atmosphere.
       </p>
     </div>
   </header>
@@ -28,67 +36,113 @@
 
     <section class="gallery-intro">
       <p class="section-label">Gallery Index</p>
+
       <p>
-        Rotate through the four canvases and select one to view it in the main frame.
+        Rotate through the five canvases and select one to view it in the main frame.
       </p>
     </section>
 
     <section class="carousel-section">
-      <button class="nav-button" id="prevButton">←</button>
+      <button
+        class="nav-button"
+        id="prevButton"
+        type="button"
+        aria-label="Previous project"
+      >
+        ←
+      </button>
 
       <div class="carousel-stage">
         <div class="carousel" id="carousel">
 
+          <!-- 01 -->
           <article class="gallery-card active" data-index="0">
             <p class="card-number">01</p>
             <p class="card-type">p5.js Canvas</p>
+
             <h2>Fractal Apparition</h2>
+
             <p>
               A static Mandelbrot drawing transformed through pale color,
               grain, gold ribbons, and atmospheric texture.
             </p>
           </article>
 
+          <!-- 02 -->
           <article class="gallery-card" data-index="1">
             <p class="card-number">02</p>
             <p class="card-type">p5.js Canvas</p>
+
             <h2>Urchin Pattern Grid</h2>
+
             <p>
               An animated graphic pattern that turns sea urchins into symbolic
               computational ornaments.
             </p>
           </article>
 
+          <!-- 03 -->
           <article class="gallery-card" data-index="2">
             <p class="card-number">03</p>
             <p class="card-type">Three.js Canvas</p>
+
             <h2>Golden Mandelbrot Jelly Field</h2>
+
             <p>
               A field of glowing Mandelbrot-based parametric spheres floating
               in a deep underwater space.
             </p>
           </article>
 
+          <!-- 04 -->
           <article class="gallery-card" data-index="3">
             <p class="card-number">04</p>
             <p class="card-type">Three.js Canvas</p>
+
             <h2>Deep-Sea Mandelbrot Tree</h2>
+
             <p>
               A large underwater tree carrying luminous Mandelbrot spheres,
               with dramatic lighting and flowing fog.
             </p>
           </article>
 
+          <!-- 05 -->
+          <article class="gallery-card" data-index="4">
+            <p class="card-number">05</p>
+            <p class="card-type">D3.js Temporal Visualization</p>
+
+            <h2>When New York Blooms</h2>
+
+            <p>
+              A seasonal visualization mapping the flowering periods of
+              plants and trees across New York City.
+            </p>
+          </article>
+
         </div>
       </div>
 
-      <button class="nav-button" id="nextButton">→</button>
+      <button
+        class="nav-button"
+        id="nextButton"
+        type="button"
+        aria-label="Next project"
+      >
+        →
+      </button>
     </section>
 
     <section class="viewer-section">
       <div class="viewer-text">
-        <p class="section-label" id="viewerType">p5.js Canvas 1</p>
-        <h2 id="viewerTitle">Fractal Apparition</h2>
+        <p class="section-label" id="viewerType">
+          p5.js Canvas 1
+        </p>
+
+        <h2 id="viewerTitle">
+          Fractal Apparition
+        </h2>
+
         <p id="viewerDescription">
           This static p5.js canvas uses the Mandelbrot set as a visual structure.
           A pale fantasy palette, soft grain, gold ribbons, and layered texture
@@ -96,7 +150,11 @@
         </p>
       </div>
 
-      <iframe id="canvasViewer" src="p5-01/01.html" title="Selected Canvas"></iframe>
+      <iframe
+        id="canvasViewer"
+        src="p5-01/01.html"
+        title="Selected computational canvas"
+      ></iframe>
     </section>
 
   </main>
@@ -110,6 +168,7 @@
           "This static p5.js canvas uses the Mandelbrot set as a visual structure. A pale fantasy palette, soft grain, gold ribbons, and layered texture transform the mathematical image into an atmospheric fractal apparition.",
         src: "p5-01/01.html"
       },
+
       {
         type: "p5.js Canvas 2",
         title: "Urchin Pattern Grid",
@@ -117,6 +176,7 @@
           "This interactive and animated p5.js canvas turns sea urchins into graphic symbols. Variable grid cells, changing scale, dense outlines, and subtle animation create a patterned spatial surface between ornament, organism, and computation.",
         src: "p5-02/02.html"
       },
+
       {
         type: "Three.js Canvas 1",
         title: "Golden Mandelbrot Jelly Field",
@@ -124,17 +184,27 @@
           "This Three.js canvas translates the Mandelbrot set into a field of glowing parametric spheres. Each sphere is generated from fractal iteration values that control surface color, relief, and perforated openings. Orbit camera controls allow the viewer to navigate the floating geometry in 3D space.",
         src: "three-01.html"
       },
+
       {
         type: "Three.js Canvas 2",
         title: "Deep-Sea Mandelbrot Tree",
         description:
           "This canvas focuses on material, lighting, fog, and atmosphere. A large tree-like structure rises from an underwater rock formation, carrying glowing Mandelbrot spheres like luminous fruit. Dramatic spotlights, emissive materials, floating particles, and flowing fog create a deep-sea spatial environment.",
         src: "three-02.html"
+      },
+
+      {
+        type: "D3.js Temporal Visualization",
+        title: "When New York Blooms",
+        description:
+          "This D3.js temporal visualization maps the seasonal flowering periods of plants and trees in New York City. Layered timelines, botanical colors, and interactive data reveal how different species emerge, overlap, and disappear throughout the year.",
+        src: "when-new-york-blooms-dreamscape/index.html"
       }
     ];
 
     const carousel = document.getElementById("carousel");
     const cards = document.querySelectorAll(".gallery-card");
+
     const prevButton = document.getElementById("prevButton");
     const nextButton = document.getElementById("nextButton");
 
@@ -144,11 +214,13 @@
     const canvasViewer = document.getElementById("canvasViewer");
 
     let currentIndex = 0;
+
     const total = works.length;
     const angleStep = 360 / total;
 
     function updateGallery() {
       const rotation = currentIndex * -angleStep;
+
       carousel.style.transform = `rotateY(${rotation}deg)`;
 
       cards.forEach((card, index) => {
@@ -156,10 +228,13 @@
       });
 
       const currentWork = works[currentIndex];
+
       viewerType.textContent = currentWork.type;
       viewerTitle.textContent = currentWork.title;
       viewerDescription.textContent = currentWork.description;
+
       canvasViewer.src = currentWork.src;
+      canvasViewer.title = currentWork.title;
     }
 
     function nextWork() {

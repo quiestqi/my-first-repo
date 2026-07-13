@@ -1,0 +1,31 @@
+index,flower,start_date,peak_date,end_date,location,color,max_amplitude
+0,Snowdrop,2025-01-20,2025-02-10,2025-03-01,Central Park,#F5F5F2,11.893
+1,Winter Aconite,2025-02-01,2025-02-20,2025-03-10,Central Park,#E3C94D,14.168
+2,Witch Hazel,2025-02-05,2025-02-25,2025-03-20,New York Botanical Garden,#D4A23A,15.31
+3,Crocus,2025-02-20,2025-03-15,2025-04-05,Central Park,#9B7CC2,17.261
+4,Daffodil,2025-03-10,2025-04-01,2025-04-25,Central Park,#E9C846,19.569
+5,Magnolia,2025-03-20,2025-04-08,2025-04-30,Brooklyn Botanic Garden,#D8A8B6,21.556
+6,Cherry Blossom,2025-03-25,2025-04-10,2025-04-25,Brooklyn Botanic Garden,#E8B6C8,25.266
+7,Crabapple,2025-04-05,2025-04-25,2025-05-15,Central Park,#F0C4D0,14.367
+8,Dogwood,2025-04-10,2025-05-01,2025-05-20,Central Park,#EEE8DF,13.733
+9,Tulip,2025-04-10,2025-05-05,2025-05-31,Park Avenue,#C95A5E,16.937
+10,Lilac,2025-04-25,2025-05-15,2025-06-01,Brooklyn Botanic Garden,#B48BC4,18.543
+11,Azalea,2025-04-25,2025-05-15,2025-06-05,New York Botanical Garden,#E07AA7,20.564
+12,Wisteria,2025-05-01,2025-05-18,2025-06-01,Central Park,#A78FD0,23.39
+13,Allium,2025-05-10,2025-05-30,2025-06-20,Brooklyn Botanic Garden,#9A70C2,24.393
+14,Peony,2025-05-15,2025-06-01,2025-06-20,Brooklyn Botanic Garden,#D873A4,11.804
+15,Iris,2025-05-20,2025-06-10,2025-07-01,New York Botanical Garden,#5E7DBE,16.27
+16,Rose,2025-06-01,2025-07-01,2025-10-01,New York Botanical Garden,#B54B5F,17.729
+17,Lavender,2025-06-10,2025-07-01,2025-08-01,Brooklyn Botanic Garden,#8D79B9,19.43
+18,Foxglove,2025-06-15,2025-07-05,2025-08-01,New York Botanical Garden,#C77BB3,20.8
+19,Bee Balm,2025-06-25,2025-07-15,2025-08-15,Prospect Park,#D64F6D,20.574
+20,Coneflower,2025-07-01,2025-08-01,2025-09-20,New York Botanical Garden,#C46A95,23.668
+21,Hydrangea,2025-07-01,2025-08-05,2025-09-30,New York Botanical Garden,#7696C7,14.003
+22,Sunflower,2025-07-10,2025-08-15,2025-09-30,Queens County Farm,#D4AE38,15.77
+23,Black-eyed Susan,2025-07-20,2025-08-20,2025-09-30,Prospect Park,#C69A2D,16.894
+24,Phlox,2025-07-20,2025-08-15,2025-09-15,Brooklyn Botanic Garden,#D38FAE,18.974
+25,Hibiscus,2025-08-01,2025-08-25,2025-10-01,Queens Botanical Garden,#C8575D,21.15
+26,Goldenrod,2025-08-20,2025-09-20,2025-10-20,Central Park,#C89A2E,21.192
+27,Aster,2025-09-01,2025-09-25,2025-10-31,Central Park,#8C75C1,24.751
+28,Japanese Anemone,2025-09-05,2025-10-01,2025-10-31,Brooklyn Botanic Garden,#E5D8D0,12.135
+29,Chrysanthemum,2025-09-20,2025-10-20,2025-11-20,New York Botanical Garden,#C8824A,13.564

@@ -207,7 +207,8 @@ main {
 }
 
 .carousel-stage {
-  height: 390px;
+  position: relative;
+  height: 410px;
   perspective: 1350px;
   display: flex;
   align-items: center;
@@ -225,6 +226,8 @@ main {
 
 .gallery-card {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 340px;
   height: 260px;
   padding: 22px;
@@ -232,6 +235,7 @@ main {
   background: rgba(255, 255, 255, 0.92);
   color: #111111;
   backface-visibility: hidden;
+  transform-style: preserve-3d;
   box-shadow: 10px 10px 0 #111111;
   transition:
     opacity 0.25s ease,
@@ -241,20 +245,26 @@ main {
     background 0.25s ease;
 }
 
+/* Five-card rotation: 360 ÷ 5 = 72 degrees */
+
 .gallery-card:nth-child(1) {
   transform: rotateY(0deg) translateZ(420px);
 }
 
 .gallery-card:nth-child(2) {
-  transform: rotateY(90deg) translateZ(420px);
+  transform: rotateY(72deg) translateZ(420px);
 }
 
 .gallery-card:nth-child(3) {
-  transform: rotateY(180deg) translateZ(420px);
+  transform: rotateY(144deg) translateZ(420px);
 }
 
 .gallery-card:nth-child(4) {
-  transform: rotateY(270deg) translateZ(420px);
+  transform: rotateY(216deg) translateZ(420px);
+}
+
+.gallery-card:nth-child(5) {
+  transform: rotateY(288deg) translateZ(420px);
 }
 
 .gallery-card:not(.active) {
@@ -396,7 +406,7 @@ iframe {
   }
 
   .carousel-stage {
-    height: 350px;
+    height: 370px;
   }
 
   .viewer-text {
@@ -434,6 +444,8 @@ iframe {
   }
 
   .carousel {
+    width: 300px;
+    height: 240px;
     transform-style: flat;
   }
 
@@ -443,6 +455,10 @@ iframe {
     transform: none !important;
     opacity: 0;
     pointer-events: none;
+  }
+
+  .gallery-card:not(.active) {
+    opacity: 0;
   }
 
   .gallery-card.active {
