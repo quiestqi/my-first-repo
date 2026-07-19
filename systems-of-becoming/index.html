@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Systems of Becoming — an archival relational genealogy of generative art." />
+  <title>Systems of Becoming — Archive</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="site-frame">
+    <header class="masthead">
+      <div class="masthead-mark">SB—01</div>
+      <div class="masthead-title">
+        <p class="kicker">RELATIONAL STRUCTURES / DIGITAL ARCHIVE</p>
+        <h1>Systems of Becoming</h1>
+      </div>
+      <div class="masthead-meta">
+        <span>A Relational Genealogy<br>of Generative Art</span>
+        <span>1960s—Present</span>
+      </div>
+    </header>
+
+    <nav class="archive-nav" aria-label="Archive controls">
+      <div class="archive-nav-left">
+        <span class="nav-index">INDEX</span>
+        <div id="legend" class="legend"></div>
+      </div>
+      <div class="archive-nav-right">
+        <button id="labelsButton" type="button" aria-pressed="true">Labels / On</button>
+        <button id="resetButton" type="button">Reset</button>
+      </div>
+    </nav>
+
+    <main class="archive-layout">
+      <aside class="catalogue" aria-label="Archive index">
+        <div class="catalogue-head">
+          <span>CATALOGUE</span>
+          <span id="recordCount">000 RECORDS</span>
+        </div>
+        <label class="search-wrap">
+          <span>SEARCH</span>
+          <input id="searchInput" type="search" placeholder="Artist, work, concept…" autocomplete="off" />
+        </label>
+        <div class="type-key" aria-label="Node type key">
+          <span><i class="type-dot artist-dot"></i>Artist</span>
+          <span><i class="type-square"></i>Work</span>
+          <span><i class="type-ring"></i>Concept / System</span>
+        </div>
+        <div id="archiveList" class="archive-list"></div>
+      </aside>
+
+      <section class="graph-stage">
+        <div class="stage-meta stage-meta-top">
+          <span>NETWORK VIEW</span>
+          <span>DRAG / ZOOM / SELECT</span>
+        </div>
+        <div id="graph" role="img" aria-label="Force-directed network showing artists, works, concepts, technologies and five generative actions."></div>
+        <div id="tooltip" class="tooltip" aria-hidden="true"></div>
+        <div id="errorMessage" class="error-message" hidden></div>
+        <div class="stage-meta stage-meta-bottom">
+          <span>42 NODES / 85 RELATIONS</span>
+          <span>DATASET v1.0</span>
+        </div>
+      </section>
+
+      <aside id="detailPanel" class="record-panel" aria-live="polite">
+        <div class="record-placeholder">
+          <p class="record-number">RECORD / —</p>
+          <h2>Select an entry</h2>
+          <p>Choose a node or catalogue item to inspect its role, period, description and relational context.</p>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="site-footer">
+      <span>Rules / Variation / Execution / Emergence / Authorship</span>
+      <span>Nodes.csv + Edges.csv</span>
+      <span>CDP · Relational Structures</span>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="script.js"></script>
+</body>
+</html>

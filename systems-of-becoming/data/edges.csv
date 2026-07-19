@@ -1,0 +1,86 @@
+﻿source,target,relationship,weight
+sol-lewitt,write-rules,exemplifies,3
+vera-molnar,write-rules,exemplifies,3
+instruction,write-rules,defines,3
+constraint,write-rules,structures,2
+algorithm,write-rules,formalizes,3
+john-cage,introduce-variation,exemplifies,3
+vera-molnar,introduce-variation,also exemplifies,2
+chance,introduce-variation,defines,3
+randomness,introduce-variation,operationalizes,3
+mutation,introduce-variation,operationalizes,3
+georg-nees,execute-systems,exemplifies,3
+frieder-nake,execute-systems,exemplifies,3
+harold-cohen,execute-systems,exemplifies,3
+plotter,execute-systems,materializes,3
+robotic-drawing,execute-systems,materializes,3
+karl-sims,evolve-outcomes,exemplifies,3
+sommerer-mignonneau,evolve-outcomes,exemplifies,3
+casey-reas,evolve-outcomes,exemplifies,3
+emergence,evolve-outcomes,defines,3
+artificial-life,evolve-outcomes,frames,3
+anna-ridler,negotiate-authorship,exemplifies,3
+sougwen-chung,negotiate-authorship,exemplifies,3
+entangled-others,negotiate-authorship,also exemplifies,2
+dataset,negotiate-authorship,reshapes,3
+authorship,negotiate-authorship,defines,3
+human-machine-collaboration,negotiate-authorship,reframes,3
+john-cage,chance,uses,3
+john-cage,instruction,uses,2
+sol-lewitt,instruction,centers practice on,3
+sol-lewitt,constraint,uses,2
+sol-lewitt,wall-drawings,creates,3
+instruction,wall-drawings,generates,3
+vera-molnar,algorithm,uses,3
+vera-molnar,randomness,introduces,3
+vera-molnar,interruptions,creates,3
+constraint,interruptions,structures,2
+randomness,interruptions,disrupts,3
+georg-nees,algorithm,programs with,3
+georg-nees,plotter,uses,3
+frieder-nake,algorithm,programs with,3
+frieder-nake,plotter,uses,3
+algorithm,plotter,controls,3
+harold-cohen,aaron,develops,3
+aaron,algorithm,encodes,3
+aaron,plotter,controls,3
+aaron,human-machine-collaboration,enacts,3
+harold-cohen,authorship,questions,2
+karl-sims,genetic-algorithm,uses,3
+karl-sims,evolved-virtual-creatures,creates,3
+genetic-algorithm,mutation,uses,3
+genetic-algorithm,evolved-virtual-creatures,generates,3
+evolved-virtual-creatures,artificial-life,embodies,3
+evolved-virtual-creatures,emergence,demonstrates,3
+sommerer-mignonneau,a-volve,create,3
+a-volve,artificial-life,embodies,3
+a-volve,emergence,stages,3
+a-volve,human-machine-collaboration,includes audience in,2
+casey-reas,process-series,creates,3
+process-series,instruction,is built from,3
+process-series,emergence,produces,3
+algorithm,process-series,executes,2
+anna-ridler,dataset,constructs,3
+anna-ridler,mosaic-virus,creates,3
+dataset,mosaic-virus,trains,3
+gan,mosaic-virus,generates,3
+mosaic-virus,authorship,reframes,2
+sougwen-chung,drawing-operations,creates,3
+drawing-operations,robotic-drawing,uses,3
+drawing-operations,neural-network,uses,3
+drawing-operations,human-machine-collaboration,performs,3
+neural-network,dataset,learns from,3
+entangled-others,self-contained,create,3
+self-contained,mutation,uses,3
+self-contained,neural-network,uses,3
+self-contained,artificial-life,evokes,3
+self-contained,authorship,redistributes,2
+instruction,algorithm,prefigures,2
+chance,randomness,becomes computational,2
+randomness,mutation,supports,2
+algorithm,genetic-algorithm,extends into,2
+genetic-algorithm,emergence,enables,3
+artificial-life,human-machine-collaboration,complicates,1
+dataset,neural-network,trains,3
+neural-network,gan,enables,3
+human-machine-collaboration,authorship,redistributes,3

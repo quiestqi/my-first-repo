@@ -1,0 +1,43 @@
+﻿id,label,type,primary_action,year,description
+write-rules,Write Rules,action,Write Rules,,"Designing instructions, constraints, or algorithms that define how a work can be generated."
+introduce-variation,Introduce Variation,action,Introduce Variation,,"Allowing chance, randomness, noise, mutation, or probability to alter a system's output."
+execute-systems,Execute Systems,action,Execute Systems,,"Delegating the performance or production of a work to a machine, program, plotter, or robot."
+evolve-outcomes,Evolve Outcomes,action,Evolve Outcomes,,"Creating systems whose forms develop through emergence, feedback, interaction, or simulated evolution."
+negotiate-authorship,Negotiate Authorship,action,Negotiate Authorship,,"Questioning how authorship is distributed among artists, datasets, machines, collaborators, and audiences."
+john-cage,John Cage,artist,Introduce Variation,1912–1992,Used chance operations and indeterminacy to reduce direct authorial control.
+sol-lewitt,Sol LeWitt,artist,Write Rules,1928–2007,Made instructions and systems central to the production of artworks.
+vera-molnar,Vera Molnár,artist,Write Rules,1924–2023,Used algorithms and controlled variation in pioneering computer-generated art.
+georg-nees,Georg Nees,artist,Execute Systems,1926–2016,Used programmed computers and plotters to produce early algorithmic drawings.
+frieder-nake,Frieder Nake,artist,Execute Systems,1938–,Developed early computer graphics through mathematical rules and plotter execution.
+harold-cohen,Harold Cohen,artist,Execute Systems,1928–2016,Developed AARON as a long-term collaboration between artistic knowledge and software.
+karl-sims,Karl Sims,artist,Evolve Outcomes,1962–,Used genetic algorithms and artificial evolution to generate images and virtual organisms.
+sommerer-mignonneau,Sommerer & Mignonneau,artist_collective,Evolve Outcomes,,Created interactive artificial-life systems shaped by participant behavior.
+casey-reas,Casey Reas,artist,Evolve Outcomes,1972–,Builds rule-based processes whose visual forms emerge while software runs.
+anna-ridler,Anna Ridler,artist,Negotiate Authorship,1985–,Builds handmade datasets and uses machine learning to expose the politics of classification.
+sougwen-chung,Sougwen Chung,artist,Negotiate Authorship,,Collaborates with drawing robots trained on the artist's own gestures.
+entangled-others,Entangled Others,artist_collective,Evolve Outcomes,,"Uses computation, machine learning, and biological metaphors to explore nonhuman forms and co-creation."
+instruction,Instruction,concept,Write Rules,,A transferable procedure that allows a work to be performed by someone or something else.
+constraint,Constraint,concept,Write Rules,,A boundary that limits possibilities while structuring a generative space.
+algorithm,Algorithm,concept,Write Rules,,A formal sequence of operations that transforms inputs into outputs.
+chance,Chance,concept,Introduce Variation,,An intentional opening for unpredictable events.
+randomness,Randomness,concept,Introduce Variation,,Computational or procedural unpredictability used to diversify results.
+mutation,Mutation,concept,Introduce Variation,,A change introduced into inherited or repeated information.
+emergence,Emergence,concept,Evolve Outcomes,,Complex form or behavior arising from interactions among simple rules.
+artificial-life,Artificial Life,concept,Evolve Outcomes,,The simulation or construction of lifelike behavior through computational systems.
+dataset,Dataset,concept,Negotiate Authorship,,A selected and organized body of examples that shapes what a learning system can produce.
+authorship,Authorship,concept,Negotiate Authorship,,"The attribution of creative agency, responsibility, and ownership."
+human-machine-collaboration,Human–Machine Collaboration,concept,Negotiate Authorship,,A creative relation in which human and computational agents influence the result.
+plotter,Plotter,technology,Execute Systems,,A machine that materializes programmed instructions as lines on paper or other surfaces.
+aaron,AARON,system,Execute Systems,late 1960s–2016,"Harold Cohen's artmaking software, executed through screens, plotters, and painting machines."
+genetic-algorithm,Genetic Algorithm,technology,Evolve Outcomes,,"A search method that evolves candidate forms through selection, mutation, and recombination."
+neural-network,Neural Network,technology,Negotiate Authorship,,A learning system trained to model patterns in data.
+gan,GAN,technology,Negotiate Authorship,2014–,A generative model in which two neural networks compete during training.
+robotic-drawing,Robotic Drawing,technology,Execute Systems,,The use of programmable machines to perform drawing gestures.
+wall-drawings,Wall Drawings,work,Write Rules,1968–,Instruction-based works whose final appearance depends on their execution.
+interruptions,Interruptions,work,Introduce Variation,1968–1969,Vera Molnár's systematic grid works in which controlled disruptions create variation.
+evolved-virtual-creatures,Evolved Virtual Creatures,work,Evolve Outcomes,1994,Karl Sims's simulated organisms evolved for movement and behavior.
+a-volve,A-Volve,work,Evolve Outcomes,1994–1995,An interactive environment in which artificial creatures develop through participant interaction.
+process-series,Process,work,Evolve Outcomes,2004–,Casey Reas's software-based works generated by interacting instructions.
+mosaic-virus,Mosaic Virus,work,Negotiate Authorship,2018,Anna Ridler's project using a hand-built tulip dataset and machine learning.
+drawing-operations,Drawing Operations,work,Negotiate Authorship,2015–,Sougwen Chung's ongoing human–robot drawing collaborations.
+self-contained,Self-contained,work,Evolve Outcomes,2023–2024,"Entangled Others' project combining generative mutation, neural networks, synthetic DNA, and sculptural materialization."
