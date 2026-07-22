@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public, Privately — NYC POPS</title>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<main>
+    <header class="project-header">
+        <p class="project-meta">New York City · Privately Owned Public Spaces · 2026</p>
+
+        <h1>Public, Privately</h1>
+
+        <p class="project-subtitle">
+            How does private ownership shape public access in New York City?
+        </p>
+
+        <p class="project-description">
+            New York City's Privately Owned Public Spaces (POPS) are privately controlled
+            sites that are legally required to provide public access. Rather than treating
+            all POPS as equivalent, this map compares open and interior spaces while
+            visualizing the uneven distribution of required public amenities across the city.
+        </p>
+    </header>
+
+    <section class="map-section" aria-label="Interactive map of New York City POPS">
+
+        <div id="mapbox-container-3"></div>
+
+        <div class="controls" aria-label="Map controls">
+
+            <input
+                type="text"
+                id="searchFeature"
+                placeholder="Search POPS by name, address, or type..."
+                aria-label="Search POPS"
+            >
+
+            <button id="resetFilters" type="button">
+                Reset
+            </button>
+
+            <button id="fitToData" type="button">
+                View All POPS
+            </button>
+
+        </div>
+
+    </section>
+
+    <section class="method-note">
+
+        <h2>Reading the Map</h2>
+
+        <p>
+            Yellow points represent open spaces, while green points represent interior
+            spaces. Larger points indicate a greater number of required public amenities,
+            and darker overlaps reveal areas where multiple POPS are concentrated.
+            Circulation-only spaces, such as through-block connections, are excluded
+            from this study.
+        </p>
+
+    </section>
+
+</main>
+
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+    <script src="mapBox_Sketch_03.js"></script>
+</body>
+</html>

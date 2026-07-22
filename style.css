@@ -208,8 +208,8 @@ main {
 
 .carousel-stage {
   position: relative;
-  height: 410px;
-  perspective: 1350px;
+  height: 440px;
+  perspective: 1500px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -220,6 +220,7 @@ main {
   position: relative;
   width: 340px;
   height: 260px;
+  transform-origin: center center;
   transform-style: preserve-3d;
   transition: transform 0.75s cubic-bezier(0.2, 0.75, 0.22, 1);
 }
@@ -245,30 +246,34 @@ main {
     background 0.25s ease;
 }
 
-/* Five-card rotation: 360 ÷ 5 = 72 degrees */
+/* Seven-card rotation: 360 ÷ 7 ≈ 51.43 degrees */
 
 .gallery-card:nth-child(1) {
-  transform: rotateY(0deg) translateZ(420px);
+  transform: rotateY(0deg) translateZ(470px);
 }
 
 .gallery-card:nth-child(2) {
-  transform: rotateY(60deg) translateZ(420px);
+  transform: rotateY(51.43deg) translateZ(470px);
 }
 
 .gallery-card:nth-child(3) {
-  transform: rotateY(120deg) translateZ(420px);
+  transform: rotateY(102.86deg) translateZ(470px);
 }
 
 .gallery-card:nth-child(4) {
-  transform: rotateY(180deg) translateZ(420px);
+  transform: rotateY(154.29deg) translateZ(470px);
 }
 
 .gallery-card:nth-child(5) {
-  transform: rotateY(240deg) translateZ(420px);
+  transform: rotateY(205.71deg) translateZ(470px);
 }
 
 .gallery-card:nth-child(6) {
-  transform: rotateY(300deg) translateZ(420px);
+  transform: rotateY(257.14deg) translateZ(470px);
+}
+
+.gallery-card:nth-child(7) {
+  transform: rotateY(308.57deg) translateZ(470px);
 }
 
 .gallery-card:not(.active) {
