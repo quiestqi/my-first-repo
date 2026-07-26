@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Where Do You Feel Least Observed?</title>
+
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="left">Columbia GSAPP</div>
+    <div class="center">
+      Computational Design Workflows<br>
+      <span>Engagement Components</span>
+    </div>
+    <div class="right">Lin Qi</div>
+  </header>
+
+  <main>
+    <div class="project-meta">ASSIGNMENT 07 · 2026</div>
+    <h1 class="project-title">Perceived Privacy in Public Space</h1>
+    <p class="project-subtitle">A real-time participatory poll using Firebase</p>
+
+    <section class="intro">
+      <div class="section-title">Context</div>
+      <p>
+        The previous mapping study examined spaces that are legally designated as public.
+        This poll asks a different question: where do people actually feel least observed?
+      </p>
+    </section>
+
+    <section aria-labelledby="poll-heading">
+      <div class="section-title">Live Poll</div>
+      <div class="poll-container">
+        <div class="poll-question">
+          <p class="question-number">QUESTION 01</p>
+          <h2 id="poll-heading">Where do you feel least observed?</h2>
+          <p>Select one space. Responses are anonymously aggregated in real time.</p>
+        </div>
+
+        <div class="vote-buttons" id="vote-buttons">
+          <button class="vote-btn" data-option="park" type="button">
+            <span class="vote-text">Park</span>
+            <span class="vote-count" id="park-count">0</span>
+          </button>
+          <button class="vote-btn" data-option="library" type="button">
+            <span class="vote-text">Library</span>
+            <span class="vote-count" id="library-count">0</span>
+          </button>
+          <button class="vote-btn" data-option="museum" type="button">
+            <span class="vote-text">Museum</span>
+            <span class="vote-count" id="museum-count">0</span>
+          </button>
+          <button class="vote-btn" data-option="subway" type="button">
+            <span class="vote-text">Subway</span>
+            <span class="vote-count" id="subway-count">0</span>
+          </button>
+          <button class="vote-btn" data-option="street" type="button">
+            <span class="vote-text">Street</span>
+            <span class="vote-count" id="street-count">0</span>
+          </button>
+          <button class="vote-btn" data-option="nowhere" type="button">
+            <span class="vote-text">Nowhere</span>
+            <span class="vote-count" id="nowhere-count">0</span>
+          </button>
+        </div>
+
+        <div class="poll-footer">
+          <p>Total responses: <strong id="total-votes">0</strong></p>
+          <p id="vote-message" class="vote-message" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="ethics-section">
+      <div class="section-title">Data Ethics</div>
+      <p>
+        Only the selected option is stored. This page does not request names, email addresses,
+        precise locations, or other personal identifiers. The result represents visitors to this
+        webpage rather than the general public, and repeated voting may affect the totals.
+      </p>
+    </section>
+
+    <section>
+      <div class="section-title">Connection Status</div>
+      <div id="connection-status" class="status-display">
+        <span class="status-dot"></span>
+        <span>Connecting to Firebase...</span>
+      </div>
+    </section>
+  </main>
+
+  <script src="poll-app.js"></script>
+</body>
+</html>
