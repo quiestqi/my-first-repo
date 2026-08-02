@@ -246,38 +246,42 @@ main {
     background 0.25s ease;
 }
 
-/* Eight-card rotation: 360 ÷ 8 = 45 degrees */
+/* Nine-card rotation: 360 ÷ 9 = 40 degrees */
 
 .gallery-card:nth-child(1) {
-  transform: rotateY(0deg) translateZ(470px);
+  transform: rotateY(0deg) translateZ(500px);
 }
 
 .gallery-card:nth-child(2) {
-  transform: rotateY(45deg) translateZ(470px);
+  transform: rotateY(40deg) translateZ(500px);
 }
 
 .gallery-card:nth-child(3) {
-  transform: rotateY(90deg) translateZ(470px);
+  transform: rotateY(80deg) translateZ(500px);
 }
 
 .gallery-card:nth-child(4) {
-  transform: rotateY(135deg) translateZ(470px);
+  transform: rotateY(120deg) translateZ(500px);
 }
 
 .gallery-card:nth-child(5) {
-  transform: rotateY(180deg) translateZ(470px);
+  transform: rotateY(160deg) translateZ(500px);
 }
 
 .gallery-card:nth-child(6) {
-  transform: rotateY(225deg) translateZ(470px);
+  transform: rotateY(200deg) translateZ(500px);
 }
 
 .gallery-card:nth-child(7) {
-  transform: rotateY(270deg) translateZ(470px);
+  transform: rotateY(240deg) translateZ(500px);
 }
 
 .gallery-card:nth-child(8) {
-  transform: rotateY(315deg) translateZ(470px);
+  transform: rotateY(280deg) translateZ(500px);
+}
+
+.gallery-card:nth-child(9) {
+  transform: rotateY(320deg) translateZ(500px);
 }
 
 .gallery-card:not(.active) {

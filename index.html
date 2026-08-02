@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -168,7 +168,7 @@
 
     <div class="header-right">
       <p>
-        This gallery presents seven computational canvases made with p5.js,
+        This gallery presents nine computational works made with p5.js,
         Three.js, D3.js, and Mapbox. The works explore fractals, underwater environments,
         glowing geometries, symbolic organisms, temporal data, flowering cycles,
         relational systems, authorship, and spatial atmosphere.
@@ -179,7 +179,7 @@
   <main>
     <section class="gallery-intro">
       <p class="section-label">Gallery Index</p>
-      <p>Rotate through the seven canvases and select one to view it in the main frame.</p>
+      <p>Rotate through the nine works and select one to view it in the main frame.</p>
     </section>
 
     <section class="carousel-section">
@@ -248,6 +248,17 @@
     across different public and semi-public spaces.
   </p>
 </article>
+
+          <article class="gallery-card" data-index="8">
+            <p class="card-number">09</p>
+            <p class="card-type">OpenAI Agent + Firebase</p>
+            <h2>Decision Trace</h2>
+            <p>
+              An agent that reconstructs selection, modification, rejection,
+              and confirmation across a human–AI interaction.
+            </p>
+          </article>
+
 
         </div>
       </div>
@@ -335,6 +346,14 @@
         description: "This real-time engagement component asks visitors where they feel least observed. Each anonymous response is stored in Firebase Realtime Database and immediately added to the shared results.",
         src: "engagement-components/index.html",
         fullPage: false
+      },
+      {
+        type: "OpenAI Agent + Firebase",
+        title: "Decision Trace",
+        description: "Decision Trace reconstructs the sequence of decisions within a human–AI interaction. It identifies moments of selection, modification, rejection, and confirmation, distinguishes human agency from AI contribution, and stores each conversation in Firebase as a structured interaction record.",
+        src: "decision-trace-agent/index.html",
+        fullPage: true,
+        allowScroll: true
       }
     ];
 
@@ -367,6 +386,11 @@
       viewerDescription.textContent = currentWork.description;
 
       viewerSection.classList.toggle("d3-mode", currentWork.fullPage);
+
+      canvasViewer.setAttribute(
+        "scrolling",
+        currentWork.allowScroll ? "yes" : "no"
+      );
 
       const currentSource = canvasViewer.getAttribute("src");
       if (currentSource !== currentWork.src) {
@@ -402,6 +426,12 @@
     });
 
     function removeIframeScrollbars() {
+      const currentWork = works[currentIndex];
+
+      if (currentWork && currentWork.allowScroll) {
+        return;
+      }
+
       try {
         const iframeDocument =
           canvasViewer.contentDocument ||

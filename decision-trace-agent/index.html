@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Decision Trace</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header>
+    <div class="left">Columbia GSAPP</div>
+
+    <div class="center">
+      Computational Design Workflows<br>
+      <span>Assignment 08 · Agents</span>
+    </div>
+
+    <div class="right">Decision Trace</div>
+  </header>
+
+  <main>
+
+    <div class="project-meta">2026</div>
+
+    <div class="project-title">Decision Trace</div>
+
+    <div class="project-subtitle">
+      Reconstructing human–AI decision processes
+    </div>
+
+    <div class="advisor">
+      An agent that converts a user's account of an AI interaction into a structured sequence of decisions.
+    </div>
+
+    <div class="section-title">About the Tool</div>
+    <p>
+      AI-assisted work is often represented only through its final output. Decision Trace focuses instead on
+      the actions that occur during the process. Describe one interaction with an AI-generated result, and the
+      agent will identify moments of selection, modification, rejection, and confirmation.
+    </p>
+
+    <div class="section-title">Trace an Interaction</div>
+    <p>
+      Describe what the AI generated, what you chose or changed, what you removed, and how the final result
+      was accepted. The agent will reconstruct the sequence without inventing actions that were not described.
+    </p>
+
+    <div class="chat-container">
+
+      <div class="chat-messages" id="chat-messages">
+        <div class="message bot-message">
+          <div class="message-content">
+            <strong>Decision Trace Agent:</strong>
+            Describe one moment when you worked with an AI-generated result. I will reconstruct the decisions
+            made by you and the contribution made by the AI.
+          </div>
+          <div class="message-time">Just now</div>
+        </div>
+      </div>
+
+      <div class="chat-input-area">
+        <div class="input-container">
+          <input
+            type="text"
+            id="message-input"
+            placeholder="Describe one human–AI interaction..."
+            maxlength="1000"
+          >
+          <button id="send-button" class="send-button">
+            <span>Trace Decision</span>
+          </button>
+        </div>
+
+        <div class="input-hint">
+          Include the sequence of actions when possible. Press Enter to submit.
+        </div>
+      </div>
+
+      <div class="chat-status">
+        <p>Status: <span id="chat-status">Ready to trace</span></p>
+      </div>
+    </div>
+
+    <div class="section-title">Decision Vocabulary</div>
+
+    <div class="tutorial-steps">
+      <div class="step">
+        <h4>Select</h4>
+        <p>The human chooses one option from multiple AI-generated possibilities.</p>
+      </div>
+
+      <div class="step">
+        <h4>Modify</h4>
+        <p>The human retains an AI-generated result but changes part of it.</p>
+      </div>
+
+      <div class="step">
+        <h4>Reject</h4>
+        <p>The human removes, refuses, ignores, or discards a result or part of it.</p>
+      </div>
+
+      <div class="step">
+        <h4>Confirm</h4>
+        <p>The human reviews and accepts a result as final.</p>
+      </div>
+    </div>
+
+    <div class="section-title">Project Role</div>
+    <p>
+      Each conversation is stored in Firebase as a record of human–AI interaction. These records can later
+      become source data for visualizing decision-making as a process: one decision event becomes one cell,
+      and multiple traces form a larger tissue.
+    </p>
+
+    <div class="section-title">Connection Status</div>
+    <div id="connection-status" class="status-display">
+      <p>Connecting to Firebase...</p>
+    </div>
+
+  </main>
+
+  <script src="chat-bot.js"></script>
+
+</body>
+</html>
